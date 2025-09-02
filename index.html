@@ -118,33 +118,30 @@
   position: relative;
   z-index: 1;
 }
-/* Continuous header bar */
+/* Continuous pink header bar */
 .ticket-header-global {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 42px;
-  background: var(--accent);
   display: flex;
-  z-index: 1;
+  background: var(--accent);
+  color: var(--text-light);
+  font-weight: 700;
+  font-size: 16px;
+  height: 42px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden;
 }
 
-/* Each section’s header */
+/* Each part of header */
 .ticket-header-part {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-light);
-  font-weight: 700;
-  font-size: 16px;
-  border-right: 2px dashed pink; /* keeps the pink separator aligned */
+  border-right: 2px dashed #fff5; /* light dashed separator */
 }
 
 .ticket-header-part:last-child {
   border-right: none;
-}
 }
 
     /* Global header inside ticket */
