@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Sneh Prayas Boarding Pass</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
       --pink-100: #ffe6f0;
@@ -32,7 +33,6 @@
       margin: 0 auto;
     }
 
-    /* Title with logo */
     h1.main-title {
       text-align: center;
       color: var(--accent);
@@ -46,7 +46,7 @@
     }
 
     .logo-inline {
-      height: 60px; /* Bigger logo */
+      height: 60px;
       width: auto;
     }
 
@@ -97,26 +97,25 @@
       overflow: hidden;
     }
 
-    /* Repeated watermark */
+    /* Repeated smaller watermark */
     .ticket::before {
       content: "";
       position: absolute;
       inset: 0;
       background-image: url("SNEH_PRAYAS_LOGO.png");
       background-repeat: repeat;
-      background-size: 120px 120px; /* smaller tiled logos */
-      opacity: 0.05;  /* lighter watermark */
+      background-size: 40px 40px; /* 👈 smaller logos */
+      opacity: 0.04; /* lighter */
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Ensure text is above watermark */
     .ticket > * {
       position: relative;
       z-index: 1;
     }
 
-    /* Continuous pink header bar with 3 parts */
+    /* Header */
     .ticket-header-global {
       position: absolute;
       top: 0;
@@ -144,13 +143,12 @@
 
     .ticket-part {
       flex: 1;
-      padding: 58px 18px 18px; /* padding for header */
+      padding: 58px 18px 18px;
       text-align: center;
       font-size: 14px;
       position: relative;
     }
 
-    /* Dotted separator with circle */
     .ticket-part:not(:last-child) {
       border-right: 2px dashed var(--perforation);
     }
@@ -180,17 +178,21 @@
     .label {
       font-weight: 600;
     }
+
+    /* Download button */
+    #downloadBtn {
+      display: none;
+      margin: 15px auto;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Title -->
     <h1 class="main-title">
       <img src="SNEH_PRAYAS_LOGO.png" alt="Sneh Prayas Logo" class="logo-inline">
       SNEH PRAYAS — BOARDING PASS
     </h1>
 
-    <!-- Input form -->
     <div class="gateway">
       <div class="form">
         <input type="text" id="bookingId" placeholder="Enter Booking ID">
@@ -198,13 +200,12 @@
       </div>
     </div>
 
-    <!-- Ticket (generated dynamically) -->
     <div id="ticketContainer"></div>
+    <button id="downloadBtn" class="button" onclick="downloadTicket()">Download Ticket</button>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    // Passenger data
     const passengers = {
       "AST261B15R126": {
         name: "Sulekha Patni",
@@ -232,7 +233,7 @@
       }
 
       document.getElementById("ticketContainer").innerHTML = `
-        <div class="ticket">
+        <div class="ticket" id="ticket">
           <div class="ticket-header-global">
             <div class="ticket-header-part">SNEH PRAYAS</div>
             <div class="ticket-header-part">SNEH PRAYAS</div>
@@ -269,13 +270,25 @@
         </div>
       `;
 
-      // QR Code
       new QRCode(document.getElementById("qrcode"), {
         text: bookingId,
         width: 100,
         height: 100
       });
+
+      document.getElementById("downloadBtn").style.display = "block";
+    }
+
+    function downloadTicket() {
+      const ticket = document.getElementById("ticket");
+      html2canvas(ticket, { scale: 3 }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "boarding_pass.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
     }
   </script>
 </body>
 </html>
+
