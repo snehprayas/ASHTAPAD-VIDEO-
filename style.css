@@ -40,7 +40,7 @@ h1.main-title {
 }
 
 .logo-inline {
-  height: 34px;
+  height: 40px; /* bigger logo */
   width: auto;
   vertical-align: middle;
 }
@@ -98,26 +98,26 @@ h1.main-title {
   top: 0;
   left: 0;
   right: 0;
-  height: 42px;
+  height: 50px;
   background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   color: #fff;
   font-weight: 700;
-  font-size: 18px;
-  padding: 0 10px;
+  font-size: 20px;
+  padding: 0 14px;
 }
 
 .ticket-header-global img {
-  height: 26px;
+  height: 34px;
   width: auto;
 }
 
 .ticket-part {
   flex: 1;
-  padding: 50px 18px 18px; /* extra top padding for header */
+  padding: 60px 18px 18px; /* extra top padding for header */
   text-align: center;
   font-size: 14px;
 }
@@ -140,4 +140,9 @@ h1.main-title {
   padding: 8px;
   border-radius: 10px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ✅ Dotted separation between ticket parts */
+.ticket-part + .ticket-part {
+  border-left: 2px dotted var(--perforation);
 }
