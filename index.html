@@ -2,12 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SNEH PRAYAS Boarding Pass</title>
-
-  <!-- Google Fonts -->
+  <title>Sneh Prayas Boarding Pass</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --pink-100: #ffe6f0;
@@ -36,6 +32,7 @@
       margin: 0 auto;
     }
 
+    /* Title with logo */
     h1.main-title {
       text-align: center;
       color: var(--accent);
@@ -45,14 +42,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 14px;
     }
 
     .logo-inline {
-      height: 80px;  /* Bigger logo */
+      height: 60px; /* Bigger logo */
       width: auto;
-      object-fit: contain;
-      display: inline-block;
     }
 
     .gateway {
@@ -61,7 +56,6 @@
       padding: 18px 20px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
       text-align: center;
-      margin-bottom: 20px;
     }
 
     .form {
@@ -90,79 +84,69 @@
       cursor: pointer;
     }
 
-    /* Ticket layout */
+    /* Ticket */
     .ticket {
       display: flex;
       position: relative;
       width: 100%;
-      max-width: 650px;
+      max-width: 750px;
       margin: 22px auto;
       background: #fff;
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
       overflow: hidden;
+
+      /* Watermark */
+      background-image: url("SNEH_PRAYAS_LOGO.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 240px;
     }
 
-    /* Watermark logo */
-    .ticket::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 280px;
-      height: 280px;
-      background: url("SNEH_PRAYAS_LOGO.png") no-repeat center center;
-      background-size: contain;
-      opacity: 0.08;
-      transform: translate(-50%, -50%);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* Header strip */
-    .ticket::after {
-      content: "SNEH PRAYAS";
-      font-size: 20px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #fff;
-      background-color: var(--accent);
+    /* Global header inside ticket */
+    .ticket-header-global {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 36px;
-      border-radius: 10px 10px 0 0;
+      height: 42px;
+      background: var(--accent);
       display: flex;
-      justify-content: center;
       align-items: center;
-      z-index: 2;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
     }
 
     .ticket-part {
       flex: 1;
-      padding: 50px 18px 18px; /* space for header */
+      padding: 58px 18px 18px; /* padding for header */
       text-align: center;
       font-size: 14px;
       position: relative;
-      z-index: 1;
     }
 
     .ticket-part.large { flex: 1.2; }
     .ticket-part.medium { flex: 1; }
     .ticket-part.small { flex: 0.8; }
 
-    .ticket-part.stub {
-      background: linear-gradient(180deg, #fff6fb, #fff0f6);
-    }
-
-    .ticket-part.main {
-      background: linear-gradient(135deg, var(--pink-200), #fff);
-    }
-
-    /* Dotted separator */
+    /* Dotted separator with circle */
     .ticket-part:not(:last-child) {
       border-right: 2px dashed var(--perforation);
+    }
+
+    .ticket-part:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -10px;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      background: var(--pink-100);
+      border: 2px solid var(--perforation);
+      border-radius: 50%;
     }
 
     .qr {
@@ -173,15 +157,21 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
       display: inline-block;
     }
+
+    .label {
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Title -->
     <h1 class="main-title">
-      <img src="SNEH_PRAYAS_LOGO.png" alt="Logo" class="logo-inline">
+      <img src="SNEH_PRAYAS_LOGO.png" alt="Sneh Prayas Logo" class="logo-inline">
       SNEH PRAYAS — BOARDING PASS
     </h1>
 
+    <!-- Input form -->
     <div class="gateway">
       <div class="form">
         <input type="text" id="bookingId" placeholder="Enter Booking ID">
@@ -189,88 +179,76 @@
       </div>
     </div>
 
-    <!-- Ticket -->
-    <div class="ticket" id="ticket" style="display: none;">
-      <div class="ticket-part stub small">
-        <p><strong>Booking ID:</strong> <span id="ticketBookingId"></span></p>
-        <p><strong>Name:</strong> <span id="ticketName"></span></p>
-        <p><strong>Phone:</strong> <span id="ticketPhone"></span></p>
-        <p><strong>Gender:</strong> <span id="ticketGender"></span></p>
-        <div class="qr" id="qrcode"></div>
-      </div>
-
-      <div class="ticket-part main large">
-        <p><strong>From:</strong> <span id="ticketFrom"></span></p>
-        <p><strong>To:</strong> <span id="ticketTo"></span></p>
-        <p><strong>Train No:</strong> <span id="ticketTrainNo"></span></p>
-        <p><strong>Date:</strong> <span id="ticketDate"></span></p>
-        <p><strong>Time:</strong> <span id="ticketTime"></span></p>
-        <p><strong>Coach:</strong> <span id="ticketCoach"></span></p>
-        <p><strong>Seat:</strong> <span id="ticketSeat"></span></p>
-      </div>
-
-      <div class="ticket-part stub medium">
-        <p><strong>From:</strong> <span id="ticketReturnFrom"></span></p>
-        <p><strong>To:</strong> <span id="ticketReturnTo"></span></p>
-        <p><strong>Train:</strong> <span id="ticketReturnTrainNo"></span></p>
-        <p><strong>Date:</strong> <span id="ticketReturnDate"></span></p>
-        <p><strong>Time:</strong> <span id="ticketReturnTime"></span></p>
-        <p><strong>Coach:</strong> <span id="ticketReturnCoach"></span></p>
-        <p><strong>Seat:</strong> <span id="ticketReturnSeat"></span></p>
-      </div>
-    </div>
+    <!-- Ticket (generated dynamically) -->
+    <div id="ticketContainer"></div>
   </div>
 
-  <!-- QR Generator -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    const sampleData = {
-      bookingId: "AST261B15R126",
-      name: "Sulekha Patni",
-      phone: "7439519345",
-      gender: "F",
-      from: "NEW DELHI",
-      to: "HOWRAH",
-      trainNo: "SDAH DURANTO (12260)",
-      date: "07/10/2025",
-      time: "07:45pm",
-      coach: "undefined",
-      seat: "undefined",
-      returnFrom: "HOWRAH",
-      returnTo: "NEW DELHI",
-      returnTrainNo: "BKN DURONTO EXP (12259)",
-      returnDate: "25/09/2025",
-      returnTime: "05:00pm",
-      returnCoach: "undefined",
-      returnSeat: "undefined"
+    // Passenger data
+    const passengers = {
+      "AST261B15R126": {
+        name: "Sulekha Patni",
+        phone: "7439519345",
+        gender: "F",
+        onward: { from: "NEW DELHI", to: "HOWRAH", train: "SDAH DURANTO (12260)", date: "07/10/2025", time: "07:45pm", coach: "undefined", seat: "undefined" },
+        return: { from: "HOWRAH", to: "NEW DELHI", train: "BKN DURONTO EXP (12259)", date: "25/09/2025", time: "05:00pm", coach: "undefined", seat: "undefined" }
+      },
+      "AST999X77Y888": {
+        name: "Rajesh Sharma",
+        phone: "9812345678",
+        gender: "M",
+        onward: { from: "MUMBAI", to: "DELHI", train: "RAJDHANI EXPRESS (12951)", date: "15/10/2025", time: "04:00pm", coach: "B1", seat: "21" },
+        return: { from: "DELHI", to: "MUMBAI", train: "RAJDHANI EXPRESS (12952)", date: "20/10/2025", time: "07:00pm", coach: "B1", seat: "22" }
+      }
     };
 
     function generateTicket() {
-      document.getElementById("ticket").style.display = "flex";
+      const bookingId = document.getElementById('bookingId').value.trim();
+      const passenger = passengers[bookingId];
 
-      document.getElementById("ticketBookingId").innerText = sampleData.bookingId;
-      document.getElementById("ticketName").innerText = sampleData.name;
-      document.getElementById("ticketPhone").innerText = sampleData.phone;
-      document.getElementById("ticketGender").innerText = sampleData.gender;
-      document.getElementById("ticketFrom").innerText = sampleData.from;
-      document.getElementById("ticketTo").innerText = sampleData.to;
-      document.getElementById("ticketTrainNo").innerText = sampleData.trainNo;
-      document.getElementById("ticketDate").innerText = sampleData.date;
-      document.getElementById("ticketTime").innerText = sampleData.time;
-      document.getElementById("ticketCoach").innerText = sampleData.coach;
-      document.getElementById("ticketSeat").innerText = sampleData.seat;
+      if (!passenger) {
+        alert("No booking found for this ID!");
+        return;
+      }
 
-      document.getElementById("ticketReturnFrom").innerText = sampleData.returnFrom;
-      document.getElementById("ticketReturnTo").innerText = sampleData.returnTo;
-      document.getElementById("ticketReturnTrainNo").innerText = sampleData.returnTrainNo;
-      document.getElementById("ticketReturnDate").innerText = sampleData.returnDate;
-      document.getElementById("ticketReturnTime").innerText = sampleData.returnTime;
-      document.getElementById("ticketReturnCoach").innerText = sampleData.returnCoach;
-      document.getElementById("ticketReturnSeat").innerText = sampleData.returnSeat;
+      document.getElementById("ticketContainer").innerHTML = `
+        <div class="ticket">
+          <div class="ticket-header-global">SNEH PRAYAS</div>
 
-      document.getElementById("qrcode").innerHTML = "";
+          <div class="ticket-part large">
+            <p><span class="label">Booking ID:</span> ${bookingId}</p>
+            <p><span class="label">Name:</span> ${passenger.name}</p>
+            <p><span class="label">Phone:</span> ${passenger.phone}</p>
+            <p><span class="label">Gender:</span> ${passenger.gender}</p>
+            <div class="qr" id="qrcode"></div>
+          </div>
+
+          <div class="ticket-part medium">
+            <p><span class="label">From:</span> ${passenger.onward.from}</p>
+            <p><span class="label">To:</span> ${passenger.onward.to}</p>
+            <p><span class="label">Train No:</span> ${passenger.onward.train}</p>
+            <p><span class="label">Date:</span> ${passenger.onward.date}</p>
+            <p><span class="label">Time:</span> ${passenger.onward.time}</p>
+            <p><span class="label">Coach:</span> ${passenger.onward.coach}</p>
+            <p><span class="label">Seat:</span> ${passenger.onward.seat}</p>
+          </div>
+
+          <div class="ticket-part medium">
+            <p><span class="label">From:</span> ${passenger.return.from}</p>
+            <p><span class="label">To:</span> ${passenger.return.to}</p>
+            <p><span class="label">Train:</span> ${passenger.return.train}</p>
+            <p><span class="label">Date:</span> ${passenger.return.date}</p>
+            <p><span class="label">Time:</span> ${passenger.return.time}</p>
+            <p><span class="label">Coach:</span> ${passenger.return.coach}</p>
+            <p><span class="label">Seat:</span> ${passenger.return.seat}</p>
+          </div>
+        </div>
+      `;
+
+      // QR Code
       new QRCode(document.getElementById("qrcode"), {
-        text: sampleData.bookingId,
+        text: bookingId,
         width: 100,
         height: 100
       });
