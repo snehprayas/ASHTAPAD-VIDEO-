@@ -232,14 +232,6 @@
         <div class="ticket">
           <div class="ticket-header-global">SNEH PRAYAS</div>
 
-          <div class="ticket-part large">
-            <p><span class="label">Booking ID:</span> ${bookingId}</p>
-            <p><span class="label">Name:</span> ${passenger.name}</p>
-            <p><span class="label">Phone:</span> ${passenger.phone}</p>
-            <p><span class="label">Gender:</span> ${passenger.gender}</p>
-            <div class="qr" id="qrcode"></div>
-          </div>
-
           <div class="ticket-part medium">
             <p><span class="label">From:</span> ${passenger.onward.from}</p>
             <p><span class="label">To:</span> ${passenger.onward.to}</p>
@@ -249,6 +241,15 @@
             <p><span class="label">Coach:</span> ${passenger.onward.coach}</p>
             <p><span class="label">Seat:</span> ${passenger.onward.seat}</p>
           </div>
+
+          <div class="ticket-part large">
+            <p><span class="label">Booking ID:</span> ${bookingId}</p>
+            <p><span class="label">Name:</span> ${passenger.name}</p>
+            <p><span class="label">Phone:</span> ${passenger.phone}</p>
+            <p><span class="label">Gender:</span> ${passenger.gender}</p>
+            <div class="qr" id="qrcode"></div>
+          </div>
+
 
           <div class="ticket-part medium">
             <p><span class="label">From:</span> ${passenger.return.from}</p>
