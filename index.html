@@ -118,6 +118,30 @@
   position: relative;
   z-index: 1;
 }
+.ticket-header-global {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 42px;
+  background: var(--accent);
+  display: flex;
+}
+
+.ticket-header-part {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ticket-header-part:last-child {
+  border-right: none;
+}
 
     /* Global header inside ticket */
     .ticket-header-global {
@@ -198,6 +222,11 @@
     <!-- Ticket (generated dynamically) -->
     <div id="ticketContainer"></div>
   </div>
+<div class="ticket-header-global">
+  <div class="ticket-header-part">SNEH PRAYAS</div>
+  <div class="ticket-header-part">SNEH PRAYAS</div>
+  <div class="ticket-header-part">SNEH PRAYAS</div>
+</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
