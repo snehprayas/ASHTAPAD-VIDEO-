@@ -118,6 +118,7 @@
   position: relative;
   z-index: 1;
 }
+/* Continuous header bar */
 .ticket-header-global {
   position: absolute;
   top: 0;
@@ -126,21 +127,24 @@
   height: 42px;
   background: var(--accent);
   display: flex;
+  z-index: 1;
 }
 
+/* Each section’s header */
 .ticket-header-part {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--text-light);
   font-weight: 700;
   font-size: 16px;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-right: 2px dashed pink; /* keeps the pink separator aligned */
 }
 
 .ticket-header-part:last-child {
   border-right: none;
+}
 }
 
     /* Global header inside ticket */
@@ -222,6 +226,7 @@
     <!-- Ticket (generated dynamically) -->
     <div id="ticketContainer"></div>
   </div>
+<!-- Continuous header with three titles -->
 <div class="ticket-header-global">
   <div class="ticket-header-part">SNEH PRAYAS</div>
   <div class="ticket-header-part">SNEH PRAYAS</div>
