@@ -86,22 +86,38 @@
 
     /* Ticket */
     .ticket {
-      display: flex;
-      position: relative;
-      width: 100%;
-      max-width: 750px;
-      margin: 22px auto;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-      overflow: hidden;
+  display: flex;
+  position: relative;
+  width: 100%;
+  max-width: 750px;
+  margin: 22px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
 
-      /* Watermark */
-      background-image: url("SNEH_PRAYAS_LOGO.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 240px;
-    }
+/* Watermark with transparency */
+.ticket::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 260px;  /* size of watermark */
+  height: 260px;
+  background: url("SNEH_PRAYAS_LOGO.png") no-repeat center center;
+  background-size: contain;
+  opacity: 0.08;   /* 👈 adjust transparency here (0.05–0.1 works well) */
+  transform: translate(-50%, -50%);
+  pointer-events: none; /* don’t block clicks */
+  z-index: 0;
+}
+
+/* Ensure text is above watermark */
+.ticket > * {
+  position: relative;
+  z-index: 1;
+}
 
     /* Global header inside ticket */
     .ticket-header-global {
