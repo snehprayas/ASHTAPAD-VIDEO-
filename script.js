@@ -25,10 +25,10 @@ function generatePass() {
   // ✅ Ticket Layout
   ticketDiv.innerHTML = `
     <div class="ticket">
-      <!-- HEADER (Logo + Text once at top) -->
+      <!-- HEADER (Logo + Text once at top, centered) -->
       <div class="ticket-header-global">
-        <img src="SNEH PRAYAS LOGO.jpeg" alt="Logo" class="logo-inline" />
-        <span>SNEH PRAYAS</span>
+        <img src="SNEH_PRAYAS_LOGO.png" alt="Logo" class="logo-inline" />
+        <span class="org-name">SNEH PRAYAS</span>
       </div>
 
       <!-- LEFT PART -->
@@ -67,7 +67,7 @@ function generatePass() {
     <button onclick="downloadPDF()">Download as PDF</button>
   `;
 
-  // ✅ Load QR image
+  // ✅ Load QR image (static mapping preserved)
   const img = new Image();
   img.width = 100;
   img.height = 100;
