@@ -8,7 +8,6 @@
   <style>
     :root {
       --pink-100: #ffe6f0;
-      --pink-200: #fff0f6;
       --accent: #d63384;
       --accent-2: #ff6699;
       --perforation: #eaa1c3;
@@ -97,25 +96,7 @@
       overflow: hidden;
     }
 
-    /* Repeated smaller watermark */
-    .ticket::before {
-      content: "";
-      position: ABSOLUTE;
-      inset: 0;
-      background-image: url("SNEH_PRAYAS_LOGO.png");
-      background-repeat: REPEAT;
-      background-size: 150px 150px; /* 👈 smaller logos */
-      opacity: 0.15; /* lighter */
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .ticket > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Header */
+    /* Header across all three parts */
     .ticket-header-global {
       position: absolute;
       top: 0;
@@ -147,6 +128,7 @@
       text-align: center;
       font-size: 14px;
       position: relative;
+      overflow: hidden;
     }
 
     .ticket-part:not(:last-child) {
@@ -166,6 +148,17 @@
       border-radius: 50%;
     }
 
+    /* Each part watermark */
+    .ticket-part::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("SNEH_PRAYAS_LOGO.png") center center no-repeat;
+      background-size: 120px 120px; /* watermark size */
+      opacity: 0.08; /* 👈 more transparent */
+      pointer-events: none;
+    }
+
     .qr {
       margin-top: 10px;
       background: #fff;
@@ -173,13 +166,14 @@
       border-radius: 10px;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
       display: inline-block;
+      position: relative;
+      z-index: 2; /* stays above watermark */
     }
 
     .label {
       font-weight: 600;
     }
 
-    /* Download button */
     #downloadBtn {
       display: none;
       margin: 15px auto;
@@ -291,4 +285,5 @@
   </script>
 </body>
 </html>
+
 
