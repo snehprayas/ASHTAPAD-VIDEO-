@@ -1,49 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNEH PRAYAS Boarding Pass</title>
 
-  <!-- main stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink-100: #ffe6f0;
+      --pink-200: #fff0f6;
+      --accent: #d63384;
+      --accent-2: #ff6699;
+      --perforation: #eaa1c3;
+      --text: #333;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--pink-100);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+      color: var(--text);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1.main-title {
+      text-align: center;
+      color: var(--accent);
+      font-size: 32px;
+      font-weight: 700;
+      margin: 8px 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .logo-inline {
+      height: 80px;  /* Bigger logo */
+      width: auto;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .gateway {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .gateway input {
+      padding: 10px 12px;
+      border: 2px solid #f7c7da;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 230px;
+      outline: none;
+    }
+
+    .button {
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Ticket layout */
+    .ticket {
+      display: flex;
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      margin: 22px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+    }
+
+    /* Watermark logo */
+    .ticket::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 280px;
+      height: 280px;
+      background: url("SNEH_PRAYAS_LOGO.png") no-repeat center center;
+      background-size: contain;
+      opacity: 0.08;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Header strip */
+    .ticket::after {
+      content: "SNEH PRAYAS";
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #fff;
+      background-color: var(--accent);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .ticket-part {
+      flex: 1;
+      padding: 50px 18px 18px; /* space for header */
+      text-align: center;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-part.large { flex: 1.2; }
+    .ticket-part.medium { flex: 1; }
+    .ticket-part.small { flex: 0.8; }
+
+    .ticket-part.stub {
+      background: linear-gradient(180deg, #fff6fb, #fff0f6);
+    }
+
+    .ticket-part.main {
+      background: linear-gradient(135deg, var(--pink-200), #fff);
+    }
+
+    /* Dotted separator */
+    .ticket-part:not(:last-child) {
+      border-right: 2px dashed var(--perforation);
+    }
+
+    .qr {
+      margin-top: 12px;
+      background: #fff;
+      padding: 8px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      display: inline-block;
+    }
+  </style>
 </head>
 <body>
-  <!-- Title with inline logo -->
-  <h1 class="main-title">
-    <img src="SNEH_PRAYAS_LOGO.png" alt="Logo" class="logo-inline" />
-    SNEH PRAYAS — BOARDING PASS
-  </h1>
-
   <div class="container">
-    <div id="gateway" class="gateway" role="region" aria-label="Booking gateway">
-      <div class="form" role="form" aria-label="Enter booking details">
-        <input
-          type="text"
-          id="bookingId"
-          placeholder="Enter Booking ID (SPC101)"
-          autocomplete="off"
-          aria-label="Booking ID"
-        />
-        <input
-          type="text"
-          id="name"
-          placeholder="Enter Passenger Name"
-          autocomplete="name"
-          aria-label="Passenger name"
-        />
-        <button class="button" onclick="generatePass()" aria-label="Generate boarding pass">Generate Pass</button>
+    <h1 class="main-title">
+      <img src="SNEH_PRAYAS_LOGO.png" alt="Logo" class="logo-inline">
+      SNEH PRAYAS — BOARDING PASS
+    </h1>
+
+    <div class="gateway">
+      <div class="form">
+        <input type="text" id="bookingId" placeholder="Enter Booking ID">
+        <button class="button" onclick="generateTicket()">Generate Ticket</button>
       </div>
     </div>
 
-    <div id="boardingPass" class="hidden" aria-live="polite"></div>
+    <!-- Ticket -->
+    <div class="ticket" id="ticket" style="display: none;">
+      <div class="ticket-part stub small">
+        <p><strong>Booking ID:</strong> <span id="ticketBookingId"></span></p>
+        <p><strong>Name:</strong> <span id="ticketName"></span></p>
+        <p><strong>Phone:</strong> <span id="ticketPhone"></span></p>
+        <p><strong>Gender:</strong> <span id="ticketGender"></span></p>
+        <div class="qr" id="qrcode"></div>
+      </div>
+
+      <div class="ticket-part main large">
+        <p><strong>From:</strong> <span id="ticketFrom"></span></p>
+        <p><strong>To:</strong> <span id="ticketTo"></span></p>
+        <p><strong>Train No:</strong> <span id="ticketTrainNo"></span></p>
+        <p><strong>Date:</strong> <span id="ticketDate"></span></p>
+        <p><strong>Time:</strong> <span id="ticketTime"></span></p>
+        <p><strong>Coach:</strong> <span id="ticketCoach"></span></p>
+        <p><strong>Seat:</strong> <span id="ticketSeat"></span></p>
+      </div>
+
+      <div class="ticket-part stub medium">
+        <p><strong>From:</strong> <span id="ticketReturnFrom"></span></p>
+        <p><strong>To:</strong> <span id="ticketReturnTo"></span></p>
+        <p><strong>Train:</strong> <span id="ticketReturnTrainNo"></span></p>
+        <p><strong>Date:</strong> <span id="ticketReturnDate"></span></p>
+        <p><strong>Time:</strong> <span id="ticketReturnTime"></span></p>
+        <p><strong>Coach:</strong> <span id="ticketReturnCoach"></span></p>
+        <p><strong>Seat:</strong> <span id="ticketReturnSeat"></span></p>
+      </div>
+    </div>
   </div>
 
-  <!-- Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- QR Generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    const sampleData = {
+      bookingId: "AST261B15R126",
+      name: "Sulekha Patni",
+      phone: "7439519345",
+      gender: "F",
+      from: "NEW DELHI",
+      to: "HOWRAH",
+      trainNo: "SDAH DURANTO (12260)",
+      date: "07/10/2025",
+      time: "07:45pm",
+      coach: "undefined",
+      seat: "undefined",
+      returnFrom: "HOWRAH",
+      returnTo: "NEW DELHI",
+      returnTrainNo: "BKN DURONTO EXP (12259)",
+      returnDate: "25/09/2025",
+      returnTime: "05:00pm",
+      returnCoach: "undefined",
+      returnSeat: "undefined"
+    };
 
-  <!-- Data and logic -->
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+    function generateTicket() {
+      document.getElementById("ticket").style.display = "flex";
+
+      document.getElementById("ticketBookingId").innerText = sampleData.bookingId;
+      document.getElementById("ticketName").innerText = sampleData.name;
+      document.getElementById("ticketPhone").innerText = sampleData.phone;
+      document.getElementById("ticketGender").innerText = sampleData.gender;
+      document.getElementById("ticketFrom").innerText = sampleData.from;
+      document.getElementById("ticketTo").innerText = sampleData.to;
+      document.getElementById("ticketTrainNo").innerText = sampleData.trainNo;
+      document.getElementById("ticketDate").innerText = sampleData.date;
+      document.getElementById("ticketTime").innerText = sampleData.time;
+      document.getElementById("ticketCoach").innerText = sampleData.coach;
+      document.getElementById("ticketSeat").innerText = sampleData.seat;
+
+      document.getElementById("ticketReturnFrom").innerText = sampleData.returnFrom;
+      document.getElementById("ticketReturnTo").innerText = sampleData.returnTo;
+      document.getElementById("ticketReturnTrainNo").innerText = sampleData.returnTrainNo;
+      document.getElementById("ticketReturnDate").innerText = sampleData.returnDate;
+      document.getElementById("ticketReturnTime").innerText = sampleData.returnTime;
+      document.getElementById("ticketReturnCoach").innerText = sampleData.returnCoach;
+      document.getElementById("ticketReturnSeat").innerText = sampleData.returnSeat;
+
+      document.getElementById("qrcode").innerHTML = "";
+      new QRCode(document.getElementById("qrcode"), {
+        text: sampleData.bookingId,
+        width: 100,
+        height: 100
+      });
+    }
+  </script>
 </body>
 </html>
