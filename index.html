@@ -1,28 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sneh Prayas </title> 
-<title>Boarding Pass</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1 class="main-title">
-      <img src="SNEH_PRAYAS_LOGO.png" alt="Logo" class="logo-inline" />
-      <span>SNEH PRAYAS </span>
-        <span>BOARDING PASS</span>
-    </h1>
+  <!-- Title with inline logo -->
+  <h1 class="main-title">
+    <img src="SNEH_PRAYAS_LOGO.png" alt="Logo" class="logo-inline" />
+    SNEH PRAYAS — BOARDING PASS
+  </h1>
 
-    <div class="search-section">
-      <input type="text" id="bookingId" placeholder="Enter Booking ID">
-      <button onclick="generateTicket()">Generate Ticket</button>
+  <div class="container">
+    <div id="gateway" class="gateway" role="region" aria-label="Booking gateway">
+      <div class="form" role="form" aria-label="Enter booking details">
+        <input
+          type="text"
+          id="bookingId"
+          placeholder="Enter Booking ID (SPC101)"
+          autocomplete="off"
+          aria-label="Booking ID"
+        />
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter Passenger Name"
+          autocomplete="name"
+          aria-label="Passenger name"
+        />
+        <button class="button" onclick="generatePass()" aria-label="Generate boarding pass">Generate Pass</button>
+      </div>
     </div>
 
-    <div id="ticket"></div>
+    <div id="boardingPass" class="hidden" aria-live="polite"></div>
   </div>
 
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Data and logic -->
+  <script src="data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
