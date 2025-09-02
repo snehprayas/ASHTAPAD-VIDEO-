@@ -86,65 +86,37 @@
 
     /* Ticket */
     .ticket {
-  display: flex;
-  position: relative;
-  width: 100%;
-  max-width: 700px;
-  margin: 22px auto;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-}
+      display: flex;
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      margin: 22px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+    }
 
-/* Watermark with transparency */
-.ticket::before {
-  content: "";
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  width: 250px;  /* size of watermark */
-  height: 250px;
-  background: url("SNEH_PRAYAS_LOGO.png") no-repeat center center;
-  background-size: contain;
-  opacity: 0.1;   /* 👈 adjust transparency here (0.05–0.1 works well) */
-  transform: translate(-50%, -50%);
-  pointer-events: none; /* don’t block clicks */
-  z-index: 0;
-}
+    /* Repeated watermark */
+    .ticket::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("SNEH_PRAYAS_LOGO.png");
+      background-repeat: repeat;
+      background-size: 120px 120px; /* smaller tiled logos */
+      opacity: 0.05;  /* lighter watermark */
+      pointer-events: none;
+      z-index: 0;
+    }
 
-/* Ensure text is above watermark */
-.ticket > * {
-  position: relative;
-  z-index: 1;
-}
-/* Continuous pink header bar */
-.ticket-header-global {
-  display: flex;
-  background: var(--accent);
-  color: var(--text-light);
-  font-weight: 700;
-  font-size: 16px;
-  height: 42px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  overflow: hidden;
-}
+    /* Ensure text is above watermark */
+    .ticket > * {
+      position: relative;
+      z-index: 1;
+    }
 
-/* Each part of header */
-.ticket-header-part {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 2px dashed #fff5; /* light dashed separator */
-}
-
-.ticket-header-part:last-child {
-  border-right: none;
-}
-
-    /* Global header inside ticket */
+    /* Continuous pink header bar with 3 parts */
     .ticket-header-global {
       position: absolute;
       top: 0;
@@ -153,11 +125,21 @@
       height: 42px;
       background: var(--accent);
       display: flex;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .ticket-header-part {
+      flex: 1;
+      display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-weight: 700;
-      font-size: 18px;
+      border-right: 2px dashed #fff5;
+    }
+
+    .ticket-header-part:last-child {
+      border-right: none;
     }
 
     .ticket-part {
@@ -167,10 +149,6 @@
       font-size: 14px;
       position: relative;
     }
-
-    .ticket-part.large { flex: 1.5; }
-    .ticket-part.medium { flex: 1; }
-    .ticket-part.small { flex: 1; }
 
     /* Dotted separator with circle */
     .ticket-part:not(:last-child) {
@@ -223,12 +201,6 @@
     <!-- Ticket (generated dynamically) -->
     <div id="ticketContainer"></div>
   </div>
-<!-- Continuous header with three titles -->
-<div class="ticket-header-global">
-  <div class="ticket-header-part">SNEH PRAYAS</div>
-  <div class="ticket-header-part">SNEH PRAYAS</div>
-  <div class="ticket-header-part">SNEH PRAYAS</div>
-</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
@@ -261,9 +233,13 @@
 
       document.getElementById("ticketContainer").innerHTML = `
         <div class="ticket">
-          <div class="ticket-header-global">SNEH PRAYAS</div>
+          <div class="ticket-header-global">
+            <div class="ticket-header-part">SNEH PRAYAS</div>
+            <div class="ticket-header-part">SNEH PRAYAS</div>
+            <div class="ticket-header-part">SNEH PRAYAS</div>
+          </div>
 
-          <div class="ticket-part medium">
+          <div class="ticket-part">
             <p><span class="label">From:</span> ${passenger.onward.from}</p>
             <p><span class="label">To:</span> ${passenger.onward.to}</p>
             <p><span class="label">Train No:</span> ${passenger.onward.train}</p>
@@ -273,7 +249,7 @@
             <p><span class="label">Seat:</span> ${passenger.onward.seat}</p>
           </div>
 
-          <div class="ticket-part large">
+          <div class="ticket-part">
             <p><span class="label">Booking ID:</span> ${bookingId}</p>
             <p><span class="label">Name:</span> ${passenger.name}</p>
             <p><span class="label">Phone:</span> ${passenger.phone}</p>
@@ -281,8 +257,7 @@
             <div class="qr" id="qrcode"></div>
           </div>
 
-
-          <div class="ticket-part medium">
+          <div class="ticket-part">
             <p><span class="label">From:</span> ${passenger.return.from}</p>
             <p><span class="label">To:</span> ${passenger.return.to}</p>
             <p><span class="label">Train:</span> ${passenger.return.train}</p>
