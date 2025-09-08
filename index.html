@@ -164,17 +164,17 @@
     .row .info-block { flex: 1; }
 
     /* Barcode */
-    .barcode-rotator {
-      display: inline-block;
-      transform: rotate(-90deg);
-      transform-origin: center center;
-      max-height: 160px;
+    .barcode-container {
+      width: 60px; /* reserve space for rotated barcode */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #barcodeCanvas {
-      display: block;
-      width: auto;
-      height: 120px; /* smaller barcode */
+      transform: rotate(-90deg);
+      width: 140px;   /* length of barcode after rotation */
+      height: 50px;   /* thickness */
     }
 
     .passenger-info {
@@ -241,10 +241,9 @@
 
           <!-- Left: Barcode + Passenger Info Beside -->
           <div class="ticket-part small">
-            <div class="barcode-rotator">
+            <div class="barcode-container">
               <canvas id="barcodeCanvas"></canvas>
             </div>
-
             <div class="passenger-info">
               <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
               <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
@@ -296,8 +295,8 @@
       JsBarcode(canvas, bookingId, {
         format: "CODE128",
         displayValue: false,
-        height: 40,
-        width: 1.4,
+        height: 40,   // thickness
+        width: 1.5,   // bar width
         margin: 0
       });
 
@@ -316,4 +315,3 @@
   </script>
 </body>
 </html>
-
