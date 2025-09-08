@@ -255,103 +255,90 @@
   </div>
 
   <script>
-    const passengers = {
-      "AST261B15R126": {
-        name: "Sulekha Patni",
-        phone: "7439519345",
-        gender: "F",
-        onward: { train: "BKN DURONTO EXP (12259)", from: "SEALDAH", to: "NEW DELHI",  date: "25/09/2025", time: "05:00pm", coach: "B2", seat: "15" },
-        return: { train: "SDAH DURANTO (12260)", from: "NEW DELHI", to: "SEALDAH",  date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" }
-      }
-    };
+let passengers = {};
 
-    function generateTicket() {
-      const bookingId = document.getElementById('bookingId').value.trim();
-      const p = passengers[bookingId];
+async function loadPassengers() {
+  try {
+    const response = await fetch("clean_passengers.json");
+    passengers = await response.json();
+    console.log("Passengers loaded:", passengers);
+  } catch (err) {
+    console.error("Failed to load passengers.json", err);
+  }
+}
 
-      if (!p) { alert("No booking found for this ID!"); return; }
+loadPassengers();
 
-      document.getElementById("ticketContainer").innerHTML = `
-        <div class="ticket" id="ticket">
-          <div class="ticket-header-global">
-            <div class="ticket-header-part">SNEH PRAYAS</div>
-            <div class="ticket-header-part">RETURN PASS</div>
-            <div class="ticket-header-part">ONWARD PASS</div>
-          </div>
+function generateTicket() {
+  const bookingId = document.getElementById('bookingId').value.trim();
+  const p = passengers[bookingId];
 
-          <!-- Left: Barcode + Passenger Info Beside -->
-          <div class="ticket-part small">
-            <div class="barcode-container">
-              <canvas id="barcodeCanvas"></canvas>
-            </div>
-            <div class="passenger-info">
-              <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
-              <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
-              <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
-              <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
-            </div>
-          </div>
+  if (!p) { alert("No booking found for this ID!"); return; }
 
-          <!-- Middle: Return -->
-          <div class="ticket-part">
-            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return.train}</span></div>
-            <div class="route">
-              <div class="station-name">${p.return.from}</div>
-              <img src="train-right.png" class="train-img" alt="Train">
-              <div class="station-name">${p.return.to}</div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.return.date}</span></div>
-              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.return.time}</span></div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.return.coach}</span></div>
-              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.return.seat}</span></div>
-            </div>
-          </div>
+  document.getElementById("ticketContainer").innerHTML = `
+    <div class="ticket" id="ticket">
+      <div class="ticket-header-global">
+        <div class="ticket-header-part">SNEH PRAYAS</div>
+        <div class="ticket-header-part">RETURN PASS</div>
+        <div class="ticket-header-part">ONWARD PASS</div>
+      </div>
 
-          <!-- Right: Onward -->
-          <div class="ticket-part">
-            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward.train}</span></div>
-            <div class="route">
-              <div class="station-name">${p.onward.from}</div>
-              <img src="train-right.png" class="train-img" alt="Train">
-              <div class="station-name">${p.onward.to}</div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.onward.date}</span></div>
-              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.onward.time}</span></div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.onward.coach}</span></div>
-              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.onward.seat}</span></div>
-            </div>
-          </div>
+      <!-- Left: Barcode + Passenger Info -->
+      <div class="ticket-part small">
+        <div class="barcode-container">
+          <canvas id="barcodeCanvas"></canvas>
         </div>
-      `;
+        <div class="passenger-info">
+          <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
+          <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
+          <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.contact}</span></div>
+          <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
+        </div>
+      </div>
 
-      // Generate barcode
-      const canvas = document.getElementById("barcodeCanvas");
-      JsBarcode(canvas, bookingId, {
-        format: "CODE128",
-        displayValue: false,
-        height: 40,
-        width: 1.5,
-        margin: 0
-      });
+      <!-- Middle: Return -->
+      <div class="ticket-part">
+        <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return_train}</span></div>
+        <div class="route">
+          <div class="station-name">NEW DELHI</div>
+          <img src="train-right.png" class="train-img" alt="Train">
+          <div class="station-name">SEALDAH</div>
+        </div>
+        <div class="row">
+          <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.return_coach}</span></div>
+          <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.return_seat}</span></div>
+        </div>
+      </div>
 
-      document.getElementById("downloadBtn").style.display = "block";
-    }
+      <!-- Right: Onward -->
+      <div class="ticket-part">
+        <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward_train}</span></div>
+        <div class="route">
+          <div class="station-name">SEALDAH</div>
+          <img src="train-right.png" class="train-img" alt="Train">
+          <div class="station-name">NEW DELHI</div>
+        </div>
+        <div class="row">
+          <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.onward_coach}</span></div>
+          <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.onward_seat}</span></div>
+        </div>
+      </div>
+    </div>
+  `;
 
-    function downloadTicket() {
-      const ticket = document.getElementById("ticket");
-      html2canvas(ticket, { scale: 3 }).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "boarding_pass.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-    }
-  </script>
+  // Generate barcode
+  const canvas = document.getElementById("barcodeCanvas");
+  JsBarcode(canvas, bookingId, {
+    format: "CODE128",
+    displayValue: false,
+    height: 40,
+    width: 1.5,
+    margin: 0
+  });
+
+  document.getElementById("downloadBtn").style.display = "block";
+}
+</script>
+
 </body>
 </html>
