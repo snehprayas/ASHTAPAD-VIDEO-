@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     :root {
-      --pink-100: #ffe6f0; /* slightly darker pink */
+      --pink-100: #ffe6f0;
       --accent: #d63384;
       --accent-2: #ff6699;
       --perforation: #eaa1c3;
@@ -89,14 +89,34 @@
       overflow: hidden;
     }
 
+    /* === Header Fix === */
     .ticket-header-global {
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 42px; background: var(--accent);
-      display: flex; font-weight: 700; font-size: 16px; color: #fff;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 42px;
+      background: var(--accent);
+      display: flex;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
       z-index: 1;
     }
+
     .ticket-header-part {
-      flex: 1; display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Make first (SNEH PRAYAS) smaller */
+    .ticket-header-part:first-child {
+      flex: 0.6;
+    }
+
+    /* Make second & third equal */
+    .ticket-header-part:nth-child(2),
+    .ticket-header-part:nth-child(3) {
+      flex: 1.2;
     }
 
     .ticket-part {
@@ -122,19 +142,20 @@
     .ticket-part:not(:last-child) {
       border-right: 2px dashed var(--perforation);
     }
-/* Restore pink striped bottom border */
-.ticket::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 14px;
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--accent) 0 12px,
-    transparent 12px 24px
-  );
-  z-index: 1;
-}
+
+    /* Restore pink striped bottom border */
+    .ticket::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 14px;
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--accent) 0 12px,
+        transparent 12px 24px
+      );
+      z-index: 1;
+    }
 
     /* Watermark for each ticket part */
     .ticket-part::before {
@@ -174,9 +195,7 @@
       flex-shrink: 0;
     }
 
-    .info-block {
-      margin: 6px 0;
-    }
+    .info-block { margin: 6px 0; }
     .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
     .info-value { font-size: 14px; font-weight: 700; }
 
@@ -185,7 +204,7 @@
 
     /* Barcode */
     .barcode-container {
-      width: 60px; /* reserve space for rotated barcode */
+      width: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -193,8 +212,8 @@
 
     #barcodeCanvas {
       transform: rotate(-90deg);
-      width: 140px;   /* length of barcode after rotation */
-      height: 50px;   /* thickness */
+      width: 140px;
+      height: 50px;
     }
 
     .passenger-info {
@@ -204,14 +223,8 @@
       text-align: left;
       font-size: 13px;
     }
-    .passenger-info .info-label {
-      font-size: 11px;
-      color: #444;
-    }
-    .passenger-info .info-value {
-      font-size: 13px;
-      font-weight: 700;
-    }
+    .passenger-info .info-label { font-size: 11px; color: #444; }
+    .passenger-info .info-value { font-size: 13px; font-weight: 700; }
 
     #downloadBtn { display: none; margin: 15px auto; }
   </style>
@@ -259,7 +272,7 @@
             <div class="ticket-header-part">ONWARD PASS</div>
           </div>
 
-          <!-- Left: Barcode + Passenger Info Beside -->
+          <!-- Left: Barcode + Passenger Info -->
           <div class="ticket-part small">
             <div class="barcode-container">
               <canvas id="barcodeCanvas"></canvas>
@@ -335,3 +348,4 @@
   </script>
 </body>
 </html>
+
