@@ -26,11 +26,7 @@
       color: var(--text);
     }
 
-    .container {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; }
 
     h1.main-title {
       text-align: center;
@@ -43,7 +39,6 @@
       justify-content: center;
       gap: 14px;
     }
-
     .logo-inline { height: 60px; width: auto; }
 
     .gateway {
@@ -53,9 +48,7 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.06);
       text-align: center;
     }
-
     .form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-
     .gateway input {
       padding: 10px 12px;
       border: 2px solid #f7c7da;
@@ -64,7 +57,6 @@
       width: 230px;
       outline: none;
     }
-
     .button {
       padding: 10px 18px;
       border-radius: 12px;
@@ -88,7 +80,6 @@
       overflow: hidden;
     }
 
-    /* Header across all three parts */
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
       height: 42px; background: var(--accent);
@@ -123,60 +114,46 @@
       background: url("SNEH_PRAYAS_LOGO.png") center/contain no-repeat;
       opacity: 0.2; pointer-events: none; z-index: 0;
     }
-    .ticket-part > * { position: relative; z-index: 1; }  /* ensure text sits above watermark */
+    .ticket-part > * { position: relative; z-index: 1; }
 
     /* Station-to-station layout */
     .route {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      align-items: end;
+      align-items: center;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      color: black;
     }
     .end { text-align: center; }
     .end .tiny {
-      font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 2px;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: black;
+      margin-bottom: 2px;
     }
     .end .station-name {
-      font-size: 16px; font-weight: 700; color: var(--accent);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; margin: 0 auto;
+      font-size: 16px;
+      font-weight: 700;
+      color: black;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 140px;
+      margin: 0 auto;
     }
 
     .track-wrap {
-      position: relative;
       width: 180px;
-      height: 28px;
+      height: 40px;
+      position: relative;
     }
-    /* rails */
-    .track-wrap::before, .track-wrap::after {
-      content: ""; position: absolute; left: 0; right: 0; height: 2px; background: #d63384;
-      opacity: .9;
-    }
-    .track-wrap::before { top: 10px; }
-    .track-wrap::after  { bottom: 10px; }
-    /* sleepers */
-    .sleepers {
-      position: absolute; left: 0; right: 0; top: 0; bottom: 0;
-      background: repeating-linear-gradient(
-        to right,
-        transparent 0 8px,
-        rgba(214,51,132,.8) 8px 12px,
-        transparent 12px 20px
-      );
-      mask: linear-gradient(#000,#000); /* keep inside box */
-    }
-    /* train on track */
-    .train {
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 20px; line-height: 1;
-    }
+    .track-svg { width: 100%; height: 100%; }
 
     .qr {
       margin-top: 10px; background: #fff; padding: 6px; border-radius: 10px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.08); display: inline-block;
     }
-
     .label { font-weight: 600; }
 
     #downloadBtn { display: none; margin: 15px auto; }
@@ -219,10 +196,28 @@
       }
     };
 
+    function trackSVG() {
+      return `
+        <svg class="track-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 40" preserveAspectRatio="xMidYMid meet">
+          <!-- Rails -->
+          <line x1="0" y1="28" x2="300" y2="28" stroke="black" stroke-width="2"/>
+          <line x1="0" y1="32" x2="300" y2="32" stroke="black" stroke-width="2"/>
+          <!-- Sleepers -->
+          <g stroke="black" stroke-width="2">
+            ${Array.from({length: 30}, (_, i) => `<line x1="${i*10}" y1="26" x2="${i*10}" y2="34"/>`).join('')}
+          </g>
+          <!-- Simple train -->
+          <rect x="120" y="10" width="60" height="15" fill="black" rx="2"/>
+          <circle cx="130" cy="28" r="4" fill="black"/>
+          <circle cx="150" cy="28" r="4" fill="black"/>
+          <circle cx="170" cy="28" r="4" fill="black"/>
+        </svg>
+      `;
+    }
+
     function generateTicket() {
       const bookingId = document.getElementById('bookingId').value.trim();
       const p = passengers[bookingId];
-
       if (!p) { alert("No booking found for this ID!"); return; }
 
       document.getElementById("ticketContainer").innerHTML = `
@@ -240,10 +235,7 @@
                 <div class="tiny">From</div>
                 <div class="station-name">${p.onward.from}</div>
               </div>
-              <div class="track-wrap" aria-hidden="true">
-                <div class="sleepers"></div>
-                <div class="train">🚆</div>
-              </div>
+              <div class="track-wrap">${trackSVG()}</div>
               <div class="end">
                 <div class="tiny">To</div>
                 <div class="station-name">${p.onward.to}</div>
@@ -273,10 +265,7 @@
                 <div class="tiny">From</div>
                 <div class="station-name">${p.return.from}</div>
               </div>
-              <div class="track-wrap" aria-hidden="true">
-                <div class="sleepers"></div>
-                <div class="train">🚆</div>
-              </div>
+              <div class="track-wrap">${trackSVG()}</div>
               <div class="end">
                 <div class="tiny">To</div>
                 <div class="station-name">${p.return.to}</div>
@@ -311,4 +300,5 @@
   </script>
 </body>
 </html>
+
 
