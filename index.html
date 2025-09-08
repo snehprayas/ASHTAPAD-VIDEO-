@@ -122,6 +122,19 @@
     .ticket-part:not(:last-child) {
       border-right: 2px dashed var(--perforation);
     }
+/* Restore pink striped bottom border */
+.ticket::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 14px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--accent) 0 12px,
+    transparent 12px 24px
+  );
+  z-index: 1;
+}
 
     /* Watermark for each ticket part */
     .ticket-part::before {
