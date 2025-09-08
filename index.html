@@ -47,6 +47,8 @@ h1.main-title { text-align: center; color: var(--accent); font-size: 32px; font-
 .passenger-info { display: flex; flex-direction: column; gap: 4px; text-align: left; font-size: 13px; }
 .passenger-info .info-label { font-size: 11px; color: #444; }
 .passenger-info .info-value { font-size: 13px; font-weight: 700; }
+.row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
+.row .info-block { flex: 1; }
 #downloadBtn { display: none; margin: 15px auto; }
 </style>
 </head>
@@ -58,7 +60,7 @@ SNEH PRAYAS — BOARDING PASS
 </h1>
 <div class="gateway">
 <div class="form">
-<input type="text" id="bookingId" placeholder="Enter Passenger Index (0-99)">
+<input type="number" id="passengerIndex" placeholder="Enter Passenger Index">
 <button class="button" onclick="generateTicket()">Generate Ticket</button>
 </div>
 </div>
@@ -71,13 +73,12 @@ const passengers = [
   {id:"AST001B03R038", name:"Anita Jain", contact:"9830949980", gender:"FEMALE", return_train:"SDAH DURANTO (12260)", return_coach:"B10", return_seat:2, onward_train:"BKN DURONTO EXP (12259)", onward_coach:"B6", onward_seat:2},
   {id:"AST002B03R038", name:"Anjana Jain", contact:"9903148627", gender:"FEMALE", return_train:"SDAH DURANTO (12260)", return_coach:"B10", return_seat:3, onward_train:"BKN DURONTO EXP (12259)", onward_coach:"B6", onward_seat:3},
   {id:"AST003B03R038", name:"Manju Jain", contact:"6289427810", gender:"FEMALE", return_train:"SDAH DURANTO (12260)", return_coach:"B10", return_seat:5, onward_train:"BKN DURONTO EXP (12259)", onward_coach:"B6", onward_seat:5},
-  // ... include all other passengers here ...
   {id:"AST085B04R022", name:"Ajit Pandya", contact:"9007933457", gender:"MALE", return_train:"SDAH DURANTO (12260)", return_coach:null, return_seat:null, onward_train:"BKN DURONTO EXP (12259)", onward_coach:"B1", onward_seat:66}
 ];
 
 function generateTicket() {
-  const index = parseInt(document.getElementById('bookingId').value.trim());
-  const p = passengers[index];
+  const idx = parseInt(document.getElementById('passengerIndex').value);
+  const p = passengers[idx];
   if(!p){ alert("Invalid Passenger Index!"); return; }
 
   document.getElementById("ticketContainer").innerHTML = `
