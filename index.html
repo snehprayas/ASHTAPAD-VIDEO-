@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     :root {
-      --pink-100: #fff7fa;
+      --pink-100: #ffe6f0; /* slightly darker pink */
       --accent: #d63384;
       --accent-2: #ff6699;
       --perforation: #eaa1c3;
@@ -89,22 +89,11 @@
       overflow: hidden;
     }
 
-    .ticket::after {
-      content: "";
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: 14px;
-      background: repeating-linear-gradient(
-        -45deg,
-        var(--accent) 0 12px,
-        transparent 12px 24px
-      );
-    }
-
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
       height: 42px; background: var(--accent);
       display: flex; font-weight: 700; font-size: 16px; color: #fff;
+      z-index: 1;
     }
     .ticket-header-part {
       flex: 1; display: flex; align-items: center; justify-content: center;
@@ -118,7 +107,9 @@
       overflow: hidden;
       color: black;
       text-align: center;
+      z-index: 1;
     }
+
     .ticket-part.small { 
       flex: 1; 
       display: flex;
@@ -130,6 +121,22 @@
 
     .ticket-part:not(:last-child) {
       border-right: 2px dashed var(--perforation);
+    }
+
+    /* Watermark for each ticket part */
+    .ticket-part::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60%;
+      height: 60%;
+      background: url('SNEH_PRAYAS_LOGO.png') no-repeat center;
+      background-size: contain;
+      opacity: 0.08;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .route {
@@ -220,8 +227,8 @@
         name: "Sulekha Patni",
         phone: "7439519345",
         gender: "F",
-        onward: { train: "SDAH DURANTO (12260)", from: "NEW DELHI", to: "HOWRAH",  date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" },
-        return: { train: "BKN DURONTO EXP (12259)", from: "HOWRAH", to: "NEW DELHI",  date: "25/09/2025", time: "05:00pm", coach: "B2", seat: "15" }
+        onward: { train: "SDAH DURANTO (12260)", from: "HOWRAH", to: "NEW DELHI",  date: "25/09/2025", time: "05:00pm", coach: "B2", seat: "15" },
+        return: { train: "BKN DURONTO EXP (12259)", from: "NEW DELHI", to: "HOWRAH",  date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" }
       }
     };
 
@@ -295,8 +302,8 @@
       JsBarcode(canvas, bookingId, {
         format: "CODE128",
         displayValue: false,
-        height: 40,   // thickness
-        width: 1.5,   // bar width
+        height: 40,
+        width: 1.5,
         margin: 0
       });
 
