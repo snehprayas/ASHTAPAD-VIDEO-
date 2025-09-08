@@ -80,15 +80,23 @@
       display: flex;
       position: relative;
       width: 100%;
-      max-width: 880px; /* wider */
+      max-width: 880px;
       margin: 22px auto;
-      background: #fff0f6;
+      background: #fff;
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.12);
       overflow: hidden;
+      border-bottom: 10px solid transparent;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        var(--accent) 0 10px,
+        transparent 10px 20px
+      );
+      background-origin: border-box;
+      background-clip: content-box, border-box;
     }
 
-    /* Header across all three parts */
+    /* Header */
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
       height: 42px; background: var(--accent);
@@ -109,6 +117,7 @@
       overflow: hidden;
       color: black;
     }
+    .ticket-part.small { flex: 0.6; } /* smaller left part */
 
     .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
     .ticket-part:not(:last-child)::after {
@@ -117,61 +126,50 @@
       border: 2px solid var(--perforation); border-radius: 50%;
     }
 
-    /* One watermark per section */
-    .ticket-part::before {
-      content: ""; position: absolute; top: 50%; left: 50%;
-      width: 100px; height: 100px; transform: translate(-50%, -50%);
-      background: url("SNEH_PRAYAS_LOGO.png") center/contain no-repeat;
-      opacity: 0.15; pointer-events: none; z-index: 0;
-    }
-    .ticket-part > * { position: relative; z-index: 1; }
-
-    /* Route section */
+    /* Station names */
     .route {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin: 10px 0;
+      gap: 12px;
+      margin: 12px 0;
     }
 
     .station-name {
       flex: 1;
       text-align: center;
-      font-size: 16px;
+      font-size: 22px;
       font-weight: 700;
       color: black;
-      background: #fff;
-      padding: 4px 8px;
-      border-radius: 6px;
-      white-space: normal;
     }
 
     .train-img {
-      width: 80px;
+      width: 70px;
       height: auto;
       flex-shrink: 0;
     }
 
-    /* Info rows side by side */
-    .row {
-      display: flex;
-      justify-content: space-between;
-      margin: 4px 0;
-      gap: 8px;
+    /* Info formatting */
+    .info-block {
+      margin: 6px 0;
     }
+    .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
+    .info-value { font-size: 14px; font-weight: 700; }
 
-    .row p {
-      flex: 1;
-      margin: 0;
+    .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
+    .row .info-block { flex: 1; }
+
+    /* Barcode */
+    .barcode {
+      margin-bottom: 12px;
     }
-
-    .qr {
-      margin-top: 10px; background: #fff; padding: 6px; border-radius: 10px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08); display: inline-block;
+    .barcode img {
+      width: 100%;
+      max-width: 120px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
     }
-
-    .label { font-weight: 600; }
 
     #downloadBtn { display: none; margin: 15px auto; }
   </style>
@@ -216,60 +214,56 @@
         <div class="ticket" id="ticket">
           <div class="ticket-header-global">
             <div class="ticket-header-part">SNEH PRAYAS</div>
-            <div class="ticket-header-part">SNEH PRAYAS</div>
-            <div class="ticket-header-part">SNEH PRAYAS</div>
+            <div class="ticket-header-part">RETURN</div>
+            <div class="ticket-header-part">ONWARD</div>
           </div>
 
-          <!-- Onward -->
-          <div class="ticket-part">
-            <p><span class="label">Train:</span> ${p.onward.train}</p>
-            <div class="route">
-              <div class="station-name">${p.onward.from}</div>
-              <img src="train-right.png" class="train-img" alt="Train">
-              <div class="station-name">${p.onward.to}</div>
-            </div>
-            <div class="row">
-              <p><span class="label">Date:</span> ${p.onward.date}</p>
-              <p><span class="label">Time:</span> ${p.onward.time}</p>
-            </div>
-            <div class="row">
-              <p><span class="label">Coach:</span> ${p.onward.coach}</p>
-              <p><span class="label">Seat:</span> ${p.onward.seat}</p>
-            </div>
+          <!-- Left: Barcode + Passenger -->
+          <div class="ticket-part small">
+            <div class="barcode"><img src="barcode.png" alt="Barcode"></div>
+            <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
+            <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
+            <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
+            <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
           </div>
 
-          <!-- Middle / QR -->
+          <!-- Middle: Return -->
           <div class="ticket-part">
-            <p><span class="label">Booking ID:</span> ${bookingId}</p>
-            <p><span class="label">Name:</span> ${p.name}</p>
-            <p><span class="label">Phone:</span> ${p.phone}</p>
-            <p><span class="label">Gender:</span> ${p.gender}</p>
-            <div class="qr" id="qrcode"></div>
-          </div>
-
-          <!-- Return -->
-          <div class="ticket-part">
-            <p><span class="label">Train:</span> ${p.return.train}</p>
+            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return.train}</span></div>
             <div class="route">
               <div class="station-name">${p.return.from}</div>
               <img src="train-right.png" class="train-img" alt="Train">
               <div class="station-name">${p.return.to}</div>
             </div>
             <div class="row">
-              <p><span class="label">Date:</span> ${p.return.date}</p>
-              <p><span class="label">Time:</span> ${p.return.time}</p>
+              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.return.date}</span></div>
+              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.return.time}</span></div>
             </div>
             <div class="row">
-              <p><span class="label">Coach:</span> ${p.return.coach}</p>
-              <p><span class="label">Seat:</span> ${p.return.seat}</p>
+              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.return.coach}</span></div>
+              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.return.seat}</span></div>
+            </div>
+          </div>
+
+          <!-- Right: Onward -->
+          <div class="ticket-part">
+            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward.train}</span></div>
+            <div class="route">
+              <div class="station-name">${p.onward.from}</div>
+              <img src="train-right.png" class="train-img" alt="Train">
+              <div class="station-name">${p.onward.to}</div>
+            </div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.onward.date}</span></div>
+              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.onward.time}</span></div>
+            </div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.onward.coach}</span></div>
+              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.onward.seat}</span></div>
             </div>
           </div>
         </div>
       `;
-
-      new QRCode(document.getElementById("qrcode"), {
-        text: bookingId, width: 100, height: 100
-      });
 
       document.getElementById("downloadBtn").style.display = "block";
     }
