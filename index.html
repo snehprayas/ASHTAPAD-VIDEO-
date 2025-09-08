@@ -80,19 +80,20 @@
       display: flex;
       position: relative;
       width: 100%;
-      max-width: 720px;
+      max-width: 900px; /* wider */
       margin: 22px auto;
       background: #fff0f6;
-      border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       overflow: hidden;
+      height: 250px; /* shorter */
     }
 
-    /* Header across all three parts */
+    /* Header */
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
-      height: 42px; background: var(--accent);
-      display: flex; font-weight: 700; font-size: 16px; color: #fff;
+      height: 38px; background: var(--accent);
+      display: flex; font-weight: 700; font-size: 15px; color: #fff;
     }
     .ticket-header-part {
       flex: 1; display: flex; align-items: center; justify-content: center;
@@ -102,9 +103,9 @@
 
     .ticket-part {
       flex: 1;
-      padding: 58px 18px 18px;
+      padding: 50px 16px 16px;
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       position: relative;
       overflow: hidden;
       color: black;
@@ -113,14 +114,14 @@
     .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
     .ticket-part:not(:last-child)::after {
       content: ''; position: absolute; top: 50%; right: -10px; transform: translateY(-50%);
-      width: 18px; height: 18px; background: var(--pink-100);
+      width: 16px; height: 16px; background: var(--pink-100);
       border: 2px solid var(--perforation); border-radius: 50%;
     }
 
-    /* One watermark per section */
+    /* Watermark */
     .ticket-part::before {
       content: ""; position: absolute; top: 50%; left: 50%;
-      width: 100px; height: 100px; transform: translate(-50%, -50%);
+      width: 80px; height: 80px; transform: translate(-50%, -50%);
       background: url("SNEH_PRAYAS_LOGO.png") center/contain no-repeat;
       opacity: 0.15; pointer-events: none; z-index: 0;
     }
@@ -131,45 +132,46 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      margin: 10px 0;
+      gap: 12px;
+      margin: 8px 0;
     }
 
     .station-name {
       flex: 1;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: black;
-      white-space: nowrap;
       background: #fff;
-      padding: 2px 6px;
+      padding: 4px 6px;
       border-radius: 6px;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .train-svg {
-      width: 140px;
-      height: 50px;
+      width: 100px;
+      height: 40px;
       flex-shrink: 0;
     }
 
-    /* Info rows side by side */
+    /* Info rows */
     .row {
       display: flex;
       justify-content: space-between;
-      margin: 4px 0;
-      gap: 8px;
+      margin: 3px 0;
+      gap: 6px;
     }
 
     .row p {
       flex: 1;
       margin: 0;
+      font-size: 12px;
     }
 
     .qr {
-      margin-top: 10px; background: #fff; padding: 6px; border-radius: 10px;
+      margin-top: 8px; background: #fff; padding: 6px; border-radius: 10px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.08); display: inline-block;
     }
 
@@ -208,6 +210,38 @@
       }
     };
 
+    function trainSVG() {
+      return `
+        <svg class="train-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 50">
+          <!-- Engine -->
+          <rect x="5" y="18" width="35" height="18" rx="4" fill="#444" stroke="black"/>
+          <rect x="35" y="22" width="10" height="14" rx="4" fill="#666" stroke="black"/>
+          <!-- Chimney -->
+          <rect x="12" y="10" width="6" height="8" fill="#333" stroke="black"/>
+          <!-- Smoke -->
+          <circle cx="15" cy="6" r="3" fill="#bbb"/>
+          <circle cx="20" cy="3" r="2" fill="#ccc"/>
+          <!-- Window -->
+          <rect x="18" y="20" width="10" height="8" fill="#87CEEB" stroke="black"/>
+          <!-- Coaches -->
+          <rect x="50" y="18" width="35" height="18" rx="4" fill="#999" stroke="black"/>
+          <rect x="90" y="18" width="35" height="18" rx="4" fill="#999" stroke="black"/>
+          <!-- Coach Windows -->
+          <rect x="55" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
+          <rect x="65" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
+          <rect x="95" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
+          <rect x="105" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
+          <!-- Wheels -->
+          <circle cx="15" cy="40" r="5" fill="black"/>
+          <circle cx="32" cy="40" r="5" fill="black"/>
+          <circle cx="55" cy="40" r="5" fill="black"/>
+          <circle cx="72" cy="40" r="5" fill="black"/>
+          <circle cx="95" cy="40" r="5" fill="black"/>
+          <circle cx="112" cy="40" r="5" fill="black"/>
+        </svg>
+      `;
+    }
+
     function generateTicket() {
       const bookingId = document.getElementById('bookingId').value.trim();
       const p = passengers[bookingId];
@@ -227,34 +261,7 @@
             <p><span class="label">Train:</span> ${p.onward.train}</p>
             <div class="route">
               <div class="station-name">${p.onward.from}</div>
-              <svg class="train-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 50">
-                <!-- Engine Body -->
-                <rect x="5" y="18" width="35" height="18" rx="4" fill="#444" stroke="black"/>
-                <!-- Engine Nose -->
-                <rect x="0" y="22" width="10" height="14" rx="4" fill="#666" stroke="black"/>
-                <!-- Chimney -->
-                <rect x="12" y="10" width="6" height="8" fill="#333" stroke="black"/>
-                <!-- Smoke -->
-                <circle cx="15" cy="6" r="3" fill="#bbb"/>
-                <circle cx="20" cy="3" r="2" fill="#ccc"/>
-                <!-- Engine Window -->
-                <rect x="18" y="20" width="10" height="8" fill="#87CEEB" stroke="black"/>
-                <!-- Coaches -->
-                <rect x="45" y="18" width="35" height="18" rx="4" fill="#999" stroke="black"/>
-                <rect x="85" y="18" width="35" height="18" rx="4" fill="#999" stroke="black"/>
-                <!-- Coach Windows -->
-                <rect x="50" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <rect x="60" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <rect x="90" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <rect x="100" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <!-- Wheels -->
-                <circle cx="15" cy="40" r="5" fill="black"/>
-                <circle cx="32" cy="40" r="5" fill="black"/>
-                <circle cx="55" cy="40" r="5" fill="black"/>
-                <circle cx="72" cy="40" r="5" fill="black"/>
-                <circle cx="95" cy="40" r="5" fill="black"/>
-                <circle cx="112" cy="40" r="5" fill="black"/>
-              </svg>
+              ${trainSVG()}
               <div class="station-name">${p.onward.to}</div>
             </div>
             <div class="row">
@@ -281,34 +288,7 @@
             <p><span class="label">Train:</span> ${p.return.train}</p>
             <div class="route">
               <div class="station-name">${p.return.from}</div>
-              <svg class="train-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 50">
-                <!-- Engine Body -->
-                <rect x="5" y="18" width="35" height="18" rx="4" fill="#444" stroke="black"/>
-                <!-- Engine Nose -->
-                <rect x="0" y="22" width="10" height="14" rx="4" fill="#666" stroke="black"/>
-                <!-- Chimney -->
-                <rect x="12" y="10" width="6" height="8" fill="#333" stroke="black"/>
-                <!-- Smoke -->
-                <circle cx="15" cy="6" r="3" fill="#bbb"/>
-                <circle cx="20" cy="3" r="2" fill="#ccc"/>
-                <!-- Engine Window -->
-                <rect x="18" y="20" width="10" height="8" fill="#87CEEB" stroke="black"/>
-                <!-- Coaches -->
-                <rect x="45" y="18" width="35" height="18" rx="4" fill="#999" stroke="black"/>
-                <rect x="85" y="18" width="35" height="18" rx="4" fill="#999" stroke="black"/>
-                <!-- Coach Windows -->
-                <rect x="50" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <rect x="60" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <rect x="90" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <rect x="100" y="20" width="8" height="8" fill="#87CEEB" stroke="black"/>
-                <!-- Wheels -->
-                <circle cx="15" cy="40" r="5" fill="black"/>
-                <circle cx="32" cy="40" r="5" fill="black"/>
-                <circle cx="55" cy="40" r="5" fill="black"/>
-                <circle cx="72" cy="40" r="5" fill="black"/>
-                <circle cx="95" cy="40" r="5" fill="black"/>
-                <circle cx="112" cy="40" r="5" fill="black"/>
-              </svg>
+              ${trainSVG()}
               <div class="station-name">${p.return.to}</div>
             </div>
             <div class="row">
@@ -342,4 +322,3 @@
   </script>
 </body>
 </html>
-
