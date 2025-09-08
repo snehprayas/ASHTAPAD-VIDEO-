@@ -259,7 +259,7 @@ let passengers = {};
 
 async function loadPassengers() {
   try {
-    const response = await fetch("clean_passengers.json");
+    const response = await fetch("https://raw.githubusercontent.com/snehprayas/ASHTAPAD-VIDEO-/refs/heads/main/clean_passengers.json");
     passengers = await response.json();
     console.log("Passengers loaded:", passengers);
   } catch (err) {
