@@ -82,7 +82,7 @@
       width: 100%;
       max-width: 650px;
       margin: 22px auto;
-      background: #fff0f6;               /* light pink inside */
+      background: #fff0f6;
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.12);
       overflow: hidden;
@@ -102,7 +102,7 @@
 
     .ticket-part {
       flex: 1;
-      padding: 58px 18px 18px;  /* room for header */
+      padding: 58px 18px 18px;
       text-align: center;
       font-size: 14px;
       position: relative;
@@ -136,31 +136,17 @@
       color: black;
     }
 
-    .end {
-      flex: 1;
-      text-align: center;
-    }
-    .end .tiny {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: black;
-      margin-bottom: 2px;
-    }
-    .end .station-name {
+    .station-name {
       font-size: 15px;
       font-weight: 700;
       color: black;
-      white-space: normal;
-      word-break: break-word;
-      max-width: 120px;
-      margin: 0 auto;
+      white-space: nowrap;   /* keep full station name in one line */
     }
 
     .track-wrap {
       flex: 1;
-      max-width: 110px;   /* shrink so ends stay visible */
-      height: 28px;
+      max-width: 140px;   /* bigger for train */
+      height: 40px;
     }
     .track-svg { width: 100%; height: 100%; }
 
@@ -201,13 +187,6 @@
         gender: "F",
         onward: { from: "NEW DELHI", to: "HOWRAH", train: "SDAH DURANTO (12260)", date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" },
         return: { from: "HOWRAH", to: "NEW DELHI", train: "BKN DURONTO EXP (12259)", date: "25/09/2025", time: "05:00pm", coach: "B2", seat: "15" }
-      },
-      "AST999X77Y888": {
-        name: "Rajesh Sharma",
-        phone: "9812345678",
-        gender: "M",
-        onward: { from: "MUMBAI", to: "DELHI", train: "RAJDHANI EXPRESS (12951)", date: "15/10/2025", time: "04:00pm", coach: "B1", seat: "21" },
-        return: { from: "DELHI", to: "MUMBAI", train: "RAJDHANI EXPRESS (12952)", date: "20/10/2025", time: "07:00pm", coach: "B1", seat: "22" }
       }
     };
 
@@ -228,24 +207,18 @@
           <!-- Onward -->
           <div class="ticket-part">
             <div class="route">
-              <div class="end">
-                <div class="tiny">From</div>
-                <div class="station-name">${p.onward.from}</div>
-              </div>
+              <div class="station-name">${p.onward.from}</div>
               <div class="track-wrap">
-                <svg class="track-svg" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="0" y1="12" x2="200" y2="12" stroke="black" stroke-width="2"/>
-                  <line x1="0" y1="28" x2="200" y2="28" stroke="black" stroke-width="2"/>
-                  <line x1="0" y1="20" x2="200" y2="20" stroke="black" stroke-width="1" stroke-dasharray="6,6"/>
-                  <rect x="85" y="5" width="30" height="20" rx="2" fill="#d63384" stroke="black"/>
-                  <circle cx="92" cy="28" r="3" fill="black"/>
-                  <circle cx="108" cy="28" r="3" fill="black"/>
+                <svg class="track-svg" viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="20" x2="220" y2="20" stroke="black" stroke-width="2"/>
+                  <line x1="0" y1="35" x2="220" y2="35" stroke="black" stroke-width="2"/>
+                  <line x1="0" y1="27" x2="220" y2="27" stroke="black" stroke-width="1" stroke-dasharray="6,6"/>
+                  <rect x="90" y="5" width="40" height="25" rx="3" fill="#d63384" stroke="black"/>
+                  <circle cx="100" cy="35" r="4" fill="black"/>
+                  <circle cx="120" cy="35" r="4" fill="black"/>
                 </svg>
               </div>
-              <div class="end">
-                <div class="tiny">To</div>
-                <div class="station-name">${p.onward.to}</div>
-              </div>
+              <div class="station-name">${p.onward.to}</div>
             </div>
 
             <p><span class="label">Train No:</span> ${p.onward.train}</p>
@@ -267,24 +240,18 @@
           <!-- Return -->
           <div class="ticket-part">
             <div class="route">
-              <div class="end">
-                <div class="tiny">From</div>
-                <div class="station-name">${p.return.from}</div>
-              </div>
+              <div class="station-name">${p.return.from}</div>
               <div class="track-wrap">
-                <svg class="track-svg" viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="0" y1="12" x2="200" y2="12" stroke="black" stroke-width="2"/>
-                  <line x1="0" y1="28" x2="200" y2="28" stroke="black" stroke-width="2"/>
-                  <line x1="0" y1="20" x2="200" y2="20" stroke="black" stroke-width="1" stroke-dasharray="6,6"/>
-                  <rect x="85" y="5" width="30" height="20" rx="2" fill="#d63384" stroke="black"/>
-                  <circle cx="92" cy="28" r="3" fill="black"/>
-                  <circle cx="108" cy="28" r="3" fill="black"/>
+                <svg class="track-svg" viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="20" x2="220" y2="20" stroke="black" stroke-width="2"/>
+                  <line x1="0" y1="35" x2="220" y2="35" stroke="black" stroke-width="2"/>
+                  <line x1="0" y1="27" x2="220" y2="27" stroke="black" stroke-width="1" stroke-dasharray="6,6"/>
+                  <rect x="90" y="5" width="40" height="25" rx="3" fill="#d63384" stroke="black"/>
+                  <circle cx="100" cy="35" r="4" fill="black"/>
+                  <circle cx="120" cy="35" r="4" fill="black"/>
                 </svg>
               </div>
-              <div class="end">
-                <div class="tiny">To</div>
-                <div class="station-name">${p.return.to}</div>
-              </div>
+              <div class="station-name">${p.return.to}</div>
             </div>
 
             <p><span class="label">Train:</span> ${p.return.train}</p>
