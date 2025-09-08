@@ -85,17 +85,16 @@
 
     /* Ticket */
     .ticket {
-  display: flex;
-  position: relative;
-  width: 100%;
-  max-width: 650px;
-  margin: 22px auto;
-  background: #fff0f6; /* 👈 light pink inside */
-  border-radius: 18px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-}
-
+      display: flex;
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      margin: 22px auto;
+      background: #fff0f6; /* light pink inside */
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+    }
 
     /* Header across all three parts */
     .ticket-header-global {
@@ -160,8 +159,35 @@
       transform: translate(-50%, -50%);
       background: url("SNEH_PRAYAS_LOGO.png") center center no-repeat;
       background-size: contain;
-      opacity: 0.2; /* 👈 subtle transparency */
+      opacity: 0.2;
       pointer-events: none;
+    }
+
+    .station-line {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .station-line .track {
+      flex: 1;
+      height: 2px;
+      background: repeating-linear-gradient(
+        to right,
+        #d63384,
+        #d63384 6px,
+        transparent 6px,
+        transparent 12px
+      );
+      position: relative;
+    }
+
+    .station-line .train {
+      font-size: 18px;
+      margin: 0 6px;
     }
 
     .qr {
@@ -172,7 +198,7 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
       display: inline-block;
       position: relative;
-      z-index: 2; /* stays above watermark */
+      z-index: 2;
     }
 
     .label {
@@ -240,8 +266,13 @@
           </div>
 
           <div class="ticket-part">
-            <p><span class="label">From:</span> ${passenger.onward.from}</p>
-            <p><span class="label">To:</span> ${passenger.onward.to}</p>
+            <div class="station-line">
+              <span>${passenger.onward.from}</span>
+              <div class="track"></div>
+              <span class="train">🚆</span>
+              <div class="track"></div>
+              <span>${passenger.onward.to}</span>
+            </div>
             <p><span class="label">Train No:</span> ${passenger.onward.train}</p>
             <p><span class="label">Date:</span> ${passenger.onward.date}</p>
             <p><span class="label">Time:</span> ${passenger.onward.time}</p>
@@ -258,8 +289,13 @@
           </div>
 
           <div class="ticket-part">
-            <p><span class="label">From:</span> ${passenger.return.from}</p>
-            <p><span class="label">To:</span> ${passenger.return.to}</p>
+            <div class="station-line">
+              <span>${passenger.return.from}</span>
+              <div class="track"></div>
+              <span class="train">🚆</span>
+              <div class="track"></div>
+              <span>${passenger.return.to}</span>
+            </div>
             <p><span class="label">Train:</span> ${passenger.return.train}</p>
             <p><span class="label">Date:</span> ${passenger.return.date}</p>
             <p><span class="label">Time:</span> ${passenger.return.time}</p>
