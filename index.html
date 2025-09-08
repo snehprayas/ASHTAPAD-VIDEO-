@@ -5,9 +5,10 @@
   <title>Sneh Prayas Boarding Pass</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     :root {
-      --pink-100: #ffe6f0;
+      --pink-100: #fff7fa;
       --accent: #d63384;
       --accent-2: #ff6699;
       --perforation: #eaa1c3;
@@ -82,7 +83,7 @@
       width: 100%;
       max-width: 880px;
       margin: 22px auto;
-      background: #fff;
+      background: var(--pink-100);
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.12);
       overflow: hidden;
@@ -101,18 +102,15 @@
       );
     }
 
-    /* Header bar */
+    /* Header */
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
       height: 42px; background: var(--accent);
       display: flex; font-weight: 700; font-size: 16px; color: #fff;
-      text-align: center;
     }
     .ticket-header-part {
       flex: 1; display: flex; align-items: center; justify-content: center;
-      border-right: 2px dashed #fff5;
     }
-    .ticket-header-part:last-child { border-right: none; }
 
     .ticket-part {
       flex: 1;
@@ -125,12 +123,9 @@
     }
     .ticket-part.small { flex: 0.7; }
 
-    /* Only one separator (two cuts total) */
-    .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
-    .ticket-part:not(:last-child)::after {
-      content: ''; position: absolute; top: 50%; right: -10px; transform: translateY(-50%);
-      width: 18px; height: 18px; background: var(--pink-100);
-      border: 2px solid var(--perforation); border-radius: 50%;
+    /* Single separator only */
+    .ticket-part:not(:last-child) {
+      border-right: 2px dashed var(--perforation);
     }
 
     /* Station names */
@@ -143,10 +138,11 @@
     }
 
     .station-name {
+      flex: 1;
+      text-align: center;
       font-size: 22px;
       font-weight: 700;
       color: black;
-      text-align: center;
     }
 
     .train-img {
@@ -165,17 +161,21 @@
     .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
     .row .info-block { flex: 1; }
 
-    /* Barcode bottom-to-top */
+    /* Barcode column */
     .barcode-col {
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-    #barcode {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
+      justify-content: center;
       height: 100%;
-      width: 50px;
+    }
+
+    #barcode {
+      transform: rotate(-90deg);
+      transform-origin: center;
+      height: 250px !important;
+      width: 120px !important;
+      margin-bottom: 15px;
     }
 
     #downloadBtn { display: none; margin: 15px auto; }
@@ -198,10 +198,6 @@
     <div id="ticketContainer"></div>
     <button id="downloadBtn" class="button" onclick="downloadTicket()">Download Ticket</button>
   </div>
-
-  <!-- External libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
   <script>
     const passengers = {
@@ -229,7 +225,7 @@
           </div>
 
           <!-- Left: Barcode + Passenger -->
-          <div class="ticket-part small" style="text-align:left;">
+          <div class="ticket-part small">
             <div class="barcode-col">
               <svg id="barcode"></svg>
               <div>
@@ -283,8 +279,8 @@
       JsBarcode("#barcode", bookingId, {
         format: "CODE128",
         displayValue: false,
-        height: 300,
-        width: 2,
+        height: 250,
+        width: 3,
         margin: 0
       });
 
