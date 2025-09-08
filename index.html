@@ -86,14 +86,19 @@
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.12);
       overflow: hidden;
-      border-bottom: 10px solid transparent;
-      background-image: repeating-linear-gradient(
+    }
+
+    /* Pink striped bottom border */
+    .ticket::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 14px;
+      background: repeating-linear-gradient(
         -45deg,
-        var(--accent) 0 10px,
-        transparent 10px 20px
+        var(--accent) 0 12px,
+        transparent 12px 24px
       );
-      background-origin: border-box;
-      background-clip: content-box, border-box;
     }
 
     /* Header */
@@ -111,14 +116,14 @@
     .ticket-part {
       flex: 1;
       padding: 58px 18px 18px;
-      text-align: center;
       font-size: 14px;
       position: relative;
       overflow: hidden;
       color: black;
     }
-    .ticket-part.small { flex: 0.6; } /* smaller left part */
+    .ticket-part.small { flex: 0.7; } /* smaller left part */
 
+    /* Separation (single dashed + holes) */
     .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
     .ticket-part:not(:last-child)::after {
       content: ''; position: absolute; top: 50%; right: -10px; transform: translateY(-50%);
@@ -159,16 +164,16 @@
     .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
     .row .info-block { flex: 1; }
 
-    /* Barcode */
-    .barcode {
-      margin-bottom: 12px;
+    /* Barcode left aligned */
+    .barcode-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
     }
     .barcode img {
-      width: 100%;
-      max-width: 120px;
+      width: 70px;
       height: auto;
-      display: block;
-      margin: 0 auto;
     }
 
     #downloadBtn { display: none; margin: 15px auto; }
@@ -220,11 +225,15 @@
 
           <!-- Left: Barcode + Passenger -->
           <div class="ticket-part small">
-            <div class="barcode"><img src="barcode.png" alt="Barcode"></div>
-            <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
-            <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
-            <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
-            <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
+            <div class="barcode-row">
+              <div class="barcode"><img src="barcode.png" alt="Barcode"></div>
+              <div>
+                <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
+                <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
+                <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
+                <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
+              </div>
+            </div>
           </div>
 
           <!-- Middle: Return -->
