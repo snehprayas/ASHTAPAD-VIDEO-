@@ -101,11 +101,12 @@
       );
     }
 
-    /* Header */
+    /* Header bar */
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
       height: 42px; background: var(--accent);
       display: flex; font-weight: 700; font-size: 16px; color: #fff;
+      text-align: center;
     }
     .ticket-header-part {
       flex: 1; display: flex; align-items: center; justify-content: center;
@@ -120,10 +121,11 @@
       position: relative;
       overflow: hidden;
       color: black;
+      text-align: center;
     }
-    .ticket-part.small { flex: 0.7; } /* smaller left part */
+    .ticket-part.small { flex: 0.7; }
 
-    /* Separation (single dashed + holes) */
+    /* Only one separator (two cuts total) */
     .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
     .ticket-part:not(:last-child)::after {
       content: ''; position: absolute; top: 50%; right: -10px; transform: translateY(-50%);
@@ -141,11 +143,10 @@
     }
 
     .station-name {
-      flex: 1;
-      text-align: center;
       font-size: 22px;
       font-weight: 700;
       color: black;
+      text-align: center;
     }
 
     .train-img {
@@ -164,19 +165,17 @@
     .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
     .row .info-block { flex: 1; }
 
-    /* Barcode left aligned vertical */
-    .barcode-row {
+    /* Barcode bottom-to-top */
+    .barcode-col {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
     }
-
     #barcode {
-      transform: rotate(90deg);
-      height: 220px !important;
-      width: auto !important;
-      margin-right: -30px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      height: 100%;
+      width: 50px;
     }
 
     #downloadBtn { display: none; margin: 15px auto; }
@@ -230,8 +229,8 @@
           </div>
 
           <!-- Left: Barcode + Passenger -->
-          <div class="ticket-part small">
-            <div class="barcode-row">
+          <div class="ticket-part small" style="text-align:left;">
+            <div class="barcode-col">
               <svg id="barcode"></svg>
               <div>
                 <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
@@ -280,12 +279,13 @@
         </div>
       `;
 
-      // Generate barcode dynamically
+      // Generate vertical barcode
       JsBarcode("#barcode", bookingId, {
         format: "CODE128",
         displayValue: false,
-        height: 220,
-        width: 2
+        height: 300,
+        width: 2,
+        margin: 0
       });
 
       document.getElementById("downloadBtn").style.display = "block";
@@ -303,4 +303,3 @@
   </script>
 </body>
 </html>
-
