@@ -121,8 +121,8 @@
       color: black;
       text-align: center;
     }
-    .ticket-part.small { 
-      flex: 0.9; 
+    .ticket-part.small {
+      flex: 0.9;
       display: flex;
       align-items: center;
       gap: 18px;
@@ -158,27 +158,22 @@
     }
 
     /* Info formatting */
-    .info-block {
-      margin: 6px 0;
-    }
+    .info-block { margin: 6px 0; }
     .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
     .info-value { font-size: 14px; font-weight: 700; }
 
     .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
     .row .info-block { flex: 1; }
 
-    /* Barcode */
-    .barcode-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .barcode-vertical {
+    /* BARCODE (vertical via rotated wrapper) */
+    .barcode-rotator {
+      display: inline-block;
       transform: rotate(-90deg);
       transform-origin: center center;
-      width: 200px;   /* length of barcode (vertical) */
-      height: 60px;   /* thickness */
+      /* no fixed size here; the canvas size comes from JsBarcode content */
+    }
+    #barcodeCanvas {
+      display: block; /* removes inline gap */
     }
 
     .passenger-info {
@@ -236,8 +231,8 @@
 
           <!-- Left: Barcode + Passenger Info Beside -->
           <div class="ticket-part small">
-            <div class="barcode-wrapper">
-              <svg id="barcode" class="barcode-vertical"></svg>
+            <div class="barcode-rotator">
+              <canvas id="barcodeCanvas"></canvas>
             </div>
             <div class="passenger-info">
               <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
@@ -285,12 +280,13 @@
         </div>
       `;
 
-      // Generate barcode (still horizontal, but rotated via CSS)
-      JsBarcode("#barcode", bookingId, {
+      // Draw horizontal barcode onto CANVAS, then we rotate the wrapper via CSS
+      const canvas = document.getElementById("barcodeCanvas");
+      JsBarcode(canvas, bookingId, {
         format: "CODE128",
         displayValue: false,
-        height: 60,   // thickness
-        width: 2,     // bar width
+        height: 80,     // thickness of bars
+        width: 1.6,     // bar width (controls overall length after rotation)
         margin: 0
       });
 
