@@ -168,12 +168,20 @@
     .row .info-block { flex: 1; }
 
     /* Barcode */
-    .barcode-vertical {
-      transform: rotate(-90deg);
-      transform-origin: center center;
-      height: 250px !important;
-      width: 100px !important;
-    }
+    .barcode-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.barcode-vertical {
+  transform: rotate(-90deg);
+  transform-origin: center center;
+  width: 240px !important;  /* controls barcode length */
+  height: 80px !important;  /* controls barcode thickness */
+}
+
 
     .passenger-info {
       display: flex;
@@ -230,7 +238,10 @@
 
           <!-- Left: Barcode + Passenger Info Beside -->
           <div class="ticket-part small">
-            <svg id="barcode" class="barcode-vertical"></svg>
+            <div class="barcode-wrapper">
+  <svg id="barcode" class="barcode-vertical"></svg>
+</div>
+
             <div class="passenger-info">
               <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
               <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
@@ -279,12 +290,13 @@
 
       // Generate vertical barcode
       JsBarcode("#barcode", bookingId, {
-        format: "CODE128",
-        displayValue: false,
-        height: 250,
-        width: 3,
-        margin: 0
-      });
+  format: "CODE128",
+  displayValue: false,
+  height: 80,   // thickness of bars
+  width: 2,     // bar width
+  margin: 0
+});
+
 
       document.getElementById("downloadBtn").style.display = "block";
     }
