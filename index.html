@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     :root {
-      --pink-100: #ffe6f0;
+      --pink-100: #ffe6f0; /* slightly darker pink */
       --accent: #d63384;
       --accent-2: #ff6699;
       --perforation: #eaa1c3;
@@ -89,7 +89,6 @@
       overflow: hidden;
     }
 
-    /* === Header Fix === */
     .ticket-header-global {
       position: absolute;
       top: 0; left: 0; right: 0;
@@ -108,15 +107,15 @@
       justify-content: center;
     }
 
-    /* Make first (SNEH PRAYAS) smaller */
+    /* First (SNEH PRAYAS) smaller */
     .ticket-header-part:first-child {
-      flex: 0.6;
+      flex: 0 0 25%;
     }
 
-    /* Make second & third equal */
+    /* Second & third equal */
     .ticket-header-part:nth-child(2),
     .ticket-header-part:nth-child(3) {
-      flex: 1.2;
+      flex: 0 0 37.5%;
     }
 
     .ticket-part {
@@ -195,7 +194,9 @@
       flex-shrink: 0;
     }
 
-    .info-block { margin: 6px 0; }
+    .info-block {
+      margin: 6px 0;
+    }
     .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
     .info-value { font-size: 14px; font-weight: 700; }
 
@@ -204,7 +205,7 @@
 
     /* Barcode */
     .barcode-container {
-      width: 60px;
+      width: 60px; /* reserve space for rotated barcode */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -212,8 +213,8 @@
 
     #barcodeCanvas {
       transform: rotate(-90deg);
-      width: 140px;
-      height: 50px;
+      width: 140px;   /* length of barcode after rotation */
+      height: 50px;   /* thickness */
     }
 
     .passenger-info {
@@ -223,8 +224,14 @@
       text-align: left;
       font-size: 13px;
     }
-    .passenger-info .info-label { font-size: 11px; color: #444; }
-    .passenger-info .info-value { font-size: 13px; font-weight: 700; }
+    .passenger-info .info-label {
+      font-size: 11px;
+      color: #444;
+    }
+    .passenger-info .info-value {
+      font-size: 13px;
+      font-weight: 700;
+    }
 
     #downloadBtn { display: none; margin: 15px auto; }
   </style>
@@ -272,7 +279,7 @@
             <div class="ticket-header-part">ONWARD PASS</div>
           </div>
 
-          <!-- Left: Barcode + Passenger Info -->
+          <!-- Left: Barcode + Passenger Info Beside -->
           <div class="ticket-part small">
             <div class="barcode-container">
               <canvas id="barcodeCanvas"></canvas>
@@ -348,4 +355,3 @@
   </script>
 </body>
 </html>
-
