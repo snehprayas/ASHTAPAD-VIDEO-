@@ -89,7 +89,6 @@
       overflow: hidden;
     }
 
-    /* Pink striped bottom border */
     .ticket::after {
       content: "";
       position: absolute;
@@ -102,7 +101,6 @@
       );
     }
 
-    /* Header */
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
       height: 42px; background: var(--accent);
@@ -121,20 +119,19 @@
       color: black;
       text-align: center;
     }
-    .ticket-part.small {
-      flex: 0.9;
+    .ticket-part.small { 
+      flex: 1; 
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
       justify-content: flex-start;
+      padding-left: 12px;
     }
 
-    /* Single separator only */
     .ticket-part:not(:last-child) {
       border-right: 2px dashed var(--perforation);
     }
 
-    /* Station names */
     .route {
       display: flex;
       align-items: center;
@@ -157,30 +154,43 @@
       flex-shrink: 0;
     }
 
-    /* Info formatting */
-    .info-block { margin: 6px 0; }
+    .info-block {
+      margin: 6px 0;
+    }
     .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
     .info-value { font-size: 14px; font-weight: 700; }
 
     .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
     .row .info-block { flex: 1; }
 
-    /* BARCODE (vertical via rotated wrapper) */
+    /* Barcode */
     .barcode-rotator {
       display: inline-block;
       transform: rotate(-90deg);
       transform-origin: center center;
-      /* no fixed size here; the canvas size comes from JsBarcode content */
+      max-height: 160px;
     }
+
     #barcodeCanvas {
-      display: block; /* removes inline gap */
+      display: block;
+      width: auto;
+      height: 120px; /* smaller barcode */
     }
 
     .passenger-info {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       text-align: left;
+      font-size: 13px;
+    }
+    .passenger-info .info-label {
+      font-size: 11px;
+      color: #444;
+    }
+    .passenger-info .info-value {
+      font-size: 13px;
+      font-weight: 700;
     }
 
     #downloadBtn { display: none; margin: 15px auto; }
@@ -234,6 +244,7 @@
             <div class="barcode-rotator">
               <canvas id="barcodeCanvas"></canvas>
             </div>
+
             <div class="passenger-info">
               <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
               <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
@@ -280,13 +291,13 @@
         </div>
       `;
 
-      // Draw horizontal barcode onto CANVAS, then we rotate the wrapper via CSS
+      // Generate barcode
       const canvas = document.getElementById("barcodeCanvas");
       JsBarcode(canvas, bookingId, {
         format: "CODE128",
         displayValue: false,
-        height: 80,     // thickness of bars
-        width: 1.6,     // bar width (controls overall length after rotation)
+        height: 40,
+        width: 1.4,
         margin: 0
       });
 
@@ -305,3 +316,4 @@
   </script>
 </body>
 </html>
+
