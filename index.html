@@ -121,7 +121,13 @@
       color: black;
       text-align: center;
     }
-    .ticket-part.small { flex: 0.7; }
+    .ticket-part.small { 
+      flex: 0.9; 
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      justify-content: flex-start;
+    }
 
     /* Single separator only */
     .ticket-part:not(:last-child) {
@@ -161,21 +167,19 @@
     .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
     .row .info-block { flex: 1; }
 
-    /* Barcode column */
-    .barcode-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
+    /* Barcode */
+    .barcode-vertical {
+      transform: rotate(-90deg);
+      transform-origin: center center;
+      height: 250px !important;
+      width: 100px !important;
     }
 
-    #barcode {
-      transform: rotate(-90deg);
-      transform-origin: center;
-      height: 250px !important;
-      width: 120px !important;
-      margin-bottom: 15px;
+    .passenger-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
     }
 
     #downloadBtn { display: none; margin: 15px auto; }
@@ -224,16 +228,14 @@
             <div class="ticket-header-part">ONWARD PASS</div>
           </div>
 
-          <!-- Left: Barcode + Passenger -->
+          <!-- Left: Barcode + Passenger Info Beside -->
           <div class="ticket-part small">
-            <div class="barcode-col">
-              <svg id="barcode"></svg>
-              <div>
-                <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
-                <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
-                <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
-                <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
-              </div>
+            <svg id="barcode" class="barcode-vertical"></svg>
+            <div class="passenger-info">
+              <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
+              <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
+              <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
+              <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
             </div>
           </div>
 
