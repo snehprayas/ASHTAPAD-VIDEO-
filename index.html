@@ -5,6 +5,7 @@
   <title>Sneh Prayas Boarding Pass</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     :root {
       --pink-100: #ffe6f0;
@@ -26,11 +27,7 @@
       color: var(--text);
     }
 
-    .container {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .container { max-width: 1100px; width: 100%; }
 
     h1.main-title {
       text-align: center;
@@ -38,16 +35,13 @@
       font-size: 32px;
       font-weight: 700;
       margin: 8px 0 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
+      display: flex; align-items: center; justify-content: center; gap: 14px;
     }
 
-    .logo-inline { height: 60px; width: auto; }
+    .logo-inline { height: 60px; }
 
     .gateway {
-      background: #ffffff;
+      background: #fff;
       border-radius: 14px;
       padding: 18px 20px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.06);
@@ -62,7 +56,6 @@
       border-radius: 10px;
       font-size: 14px;
       width: 230px;
-      outline: none;
     }
 
     .button {
@@ -79,7 +72,6 @@
     .ticket {
       display: flex;
       position: relative;
-      width: 100%;
       max-width: 880px;
       margin: 22px auto;
       background: #fff;
@@ -91,89 +83,63 @@
     /* Pink striped bottom border */
     .ticket::after {
       content: "";
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
+      position: absolute; left: 0; right: 0; bottom: 0;
       height: 14px;
-      background: repeating-linear-gradient(
-        -45deg,
-        var(--accent) 0 12px,
-        transparent 12px 24px
-      );
+      background: repeating-linear-gradient(-45deg, var(--accent) 0 12px, transparent 12px 24px);
     }
 
     /* Header */
     .ticket-header-global {
       position: absolute; top: 0; left: 0; right: 0;
       height: 42px; background: var(--accent);
-      display: flex; font-weight: 700; font-size: 16px; color: #fff;
+      display: flex; align-items: center; justify-content: space-evenly;
+      font-weight: 700; font-size: 16px; color: #fff;
     }
-    .ticket-header-part {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      border-right: 2px dashed #fff5;
-    }
-    .ticket-header-part:last-child { border-right: none; }
 
     .ticket-part {
       flex: 1;
       padding: 58px 18px 18px;
       font-size: 14px;
       position: relative;
-      overflow: hidden;
       color: black;
     }
-    .ticket-part.small { flex: 0.7; } /* smaller left part */
+    .ticket-part.small { flex: 0.6; }
 
-    /* Separation (single dashed + holes) */
-    .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
+    /* Separation (SINGLE line + holes) */
+    .ticket-part:not(:last-child) {
+      border-right: 2px dashed var(--perforation);
+    }
     .ticket-part:not(:last-child)::after {
-      content: ''; position: absolute; top: 50%; right: -10px; transform: translateY(-50%);
-      width: 18px; height: 18px; background: var(--pink-100);
-      border: 2px solid var(--perforation); border-radius: 50%;
-    }
-
-    /* Station names */
-    .route {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin: 12px 0;
-    }
-
-    .station-name {
-      flex: 1;
-      text-align: center;
-      font-size: 22px;
-      font-weight: 700;
-      color: black;
-    }
-
-    .train-img {
-      width: 70px;
-      height: auto;
-      flex-shrink: 0;
+      content: ''; position: absolute; top: 50%; right: -10px;
+      transform: translateY(-50%);
+      width: 18px; height: 18px;
+      background: var(--pink-100);
+      border: 2px solid var(--perforation);
+      border-radius: 50%;
     }
 
     /* Info formatting */
-    .info-block {
-      margin: 6px 0;
-    }
+    .info-block { margin: 6px 0; }
     .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
     .info-value { font-size: 14px; font-weight: 700; }
 
-    .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
+    .row { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; }
     .row .info-block { flex: 1; }
 
-    /* Barcode left aligned */
-    .barcode-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+    /* Barcode vertical */
+    .barcode-row { display: flex; justify-content: center; }
+    .barcode svg {
+      transform: rotate(90deg);
+      height: 100px;
     }
-    .barcode img {
-      width: 70px;
-      height: auto;
+
+    /* Section headers */
+    .section-title {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--accent);
     }
 
     #downloadBtn { display: none; margin: 15px auto; }
@@ -197,15 +163,14 @@
     <button id="downloadBtn" class="button" onclick="downloadTicket()">Download Ticket</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     const passengers = {
       "AST261B15R126": {
         name: "Sulekha Patni",
         phone: "7439519345",
         gender: "F",
-        onward: { train: "SDAH DURANTO (12260)", from: "NEW DELHI", to: "HOWRAH",  date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" },
-        return: { train: "BKN DURONTO EXP (12259)", from: "HOWRAH", to: "NEW DELHI",  date: "25/09/2025", time: "05:00pm", coach: "B2", seat: "15" }
+        onward: { train: "SDAH DURANTO (12260)", from: "NEW DELHI", to: "HOWRAH", date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" },
+        return: { train: "BKN DURONTO EXP (12259)", from: "HOWRAH", to: "NEW DELHI", date: "25/09/2025", time: "05:00pm", coach: "B2", seat: "15" }
       }
     };
 
@@ -218,31 +183,25 @@
       document.getElementById("ticketContainer").innerHTML = `
         <div class="ticket" id="ticket">
           <div class="ticket-header-global">
-            <div class="ticket-header-part">SNEH PRAYAS</div>
-            <div class="ticket-header-part">RETURN</div>
-            <div class="ticket-header-part">ONWARD</div>
+            <div>SNEH PRAYAS</div>
           </div>
 
           <!-- Left: Barcode + Passenger -->
           <div class="ticket-part small">
-            <div class="barcode-row">
-              <div class="barcode"><img src="barcode.png" alt="Barcode"></div>
-              <div>
-                <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
-                <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
-                <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
-                <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
-              </div>
-            </div>
+            <div class="barcode-row"><svg id="barcode"></svg></div>
+            <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
+            <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
+            <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
+            <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
           </div>
 
           <!-- Middle: Return -->
           <div class="ticket-part">
+            <div class="section-title">RETURN BOARDING PASS</div>
             <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return.train}</span></div>
-            <div class="route">
-              <div class="station-name">${p.return.from}</div>
-              <img src="train-right.png" class="train-img" alt="Train">
-              <div class="station-name">${p.return.to}</div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">From</span><span class="info-value">${p.return.from}</span></div>
+              <div class="info-block"><span class="info-label">To</span><span class="info-value">${p.return.to}</span></div>
             </div>
             <div class="row">
               <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.return.date}</span></div>
@@ -256,11 +215,11 @@
 
           <!-- Right: Onward -->
           <div class="ticket-part">
+            <div class="section-title">ONWARD BOARDING PASS</div>
             <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward.train}</span></div>
-            <div class="route">
-              <div class="station-name">${p.onward.from}</div>
-              <img src="train-right.png" class="train-img" alt="Train">
-              <div class="station-name">${p.onward.to}</div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">From</span><span class="info-value">${p.onward.from}</span></div>
+              <div class="info-block"><span class="info-label">To</span><span class="info-value">${p.onward.to}</span></div>
             </div>
             <div class="row">
               <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.onward.date}</span></div>
@@ -273,6 +232,15 @@
           </div>
         </div>
       `;
+
+      // Generate barcode dynamically
+      JsBarcode("#barcode", bookingId, {
+        format: "CODE128",
+        lineColor: "#000",
+        width: 2,
+        height: 80,
+        displayValue: false
+      });
 
       document.getElementById("downloadBtn").style.display = "block";
     }
