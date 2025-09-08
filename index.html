@@ -80,7 +80,7 @@
       display: flex;
       position: relative;
       width: 100%;
-      max-width: 750px; /* increased width */
+      max-width: 720px;
       margin: 22px auto;
       background: #fff0f6;
       border-radius: 18px;
@@ -102,13 +102,12 @@
 
     .ticket-part {
       flex: 1;
-      padding: 58px 18px 20px;
+      padding: 58px 18px 18px;
       text-align: center;
       font-size: 14px;
       position: relative;
       overflow: hidden;
       color: black;
-      min-height: 280px; /* taller so train fits */
     }
 
     .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
@@ -123,39 +122,45 @@
       content: ""; position: absolute; top: 50%; left: 50%;
       width: 100px; height: 100px; transform: translate(-50%, -50%);
       background: url("SNEH_PRAYAS_LOGO.png") center/contain no-repeat;
-      opacity: 0.12; pointer-events: none; z-index: 0;
+      opacity: 0.15; pointer-events: none; z-index: 0;
     }
     .ticket-part > * { position: relative; z-index: 1; }
 
-    /* Route styling */
+    /* Route section */
     .route {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin: 12px 0 16px;
-      color: black;
+      margin: 10px 0;
     }
 
     .station-name {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: black;
       white-space: nowrap;
+      background: #fff;
+      padding: 2px 6px;
+      border-radius: 6px;
     }
 
-    .track-wrap {
+    .train-svg {
+      width: 80px; height: 40px;
+      flex-shrink: 0;
+    }
+
+    /* Info rows side by side */
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 4px 0;
+      gap: 8px;
+    }
+
+    .row p {
       flex: 1;
-      max-width: 280px;  /* more space for train */
-      height: 90px;
-    }
-    .track-svg { width: 100%; height: 100%; }
-
-    .train-title {
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: black;
+      margin: 0;
     }
 
     .qr {
@@ -193,7 +198,7 @@
         name: "Sulekha Patni",
         phone: "7439519345",
         gender: "F",
-        onward: { train: "SDAH DURONTO (12260)", from: "NEW DELHI", to: "HOWRAH",  date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" },
+        onward: { train: "SDAH DURANTO (12260)", from: "NEW DELHI", to: "HOWRAH",  date: "07/10/2025", time: "07:45pm", coach: "B1", seat: "21" },
         return: { train: "BKN DURONTO EXP (12259)", from: "HOWRAH", to: "NEW DELHI",  date: "25/09/2025", time: "05:00pm", coach: "B2", seat: "15" }
       }
     };
@@ -214,25 +219,24 @@
 
           <!-- Onward -->
           <div class="ticket-part">
-            <div class="train-title">${p.onward.train}</div>
+            <p><span class="label">Train:</span> ${p.onward.train}</p>
             <div class="route">
               <div class="station-name">${p.onward.from}</div>
-              <div class="track-wrap">
-                <svg class="track-svg" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="0" y1="30" x2="300" y2="30" stroke="black" stroke-width="3"/>
-                  <line x1="0" y1="50" x2="300" y2="50" stroke="black" stroke-width="3"/>
-                  <line x1="0" y1="40" x2="300" y2="40" stroke="black" stroke-width="1" stroke-dasharray="8,6"/>
-                  <rect x="120" y="10" width="70" height="35" rx="4" fill="#d63384" stroke="black"/>
-                  <circle cx="135" cy="50" r="6" fill="black"/>
-                  <circle cx="175" cy="50" r="6" fill="black"/>
-                </svg>
-              </div>
+              <svg class="train-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40">
+                <rect x="5" y="10" width="60" height="20" rx="4" fill="#d63384" stroke="black"/>
+                <circle cx="20" cy="32" r="4" fill="black"/>
+                <circle cx="50" cy="32" r="4" fill="black"/>
+              </svg>
               <div class="station-name">${p.onward.to}</div>
             </div>
-            <p><span class="label">Date:</span> ${p.onward.date}</p>
-            <p><span class="label">Time:</span> ${p.onward.time}</p>
-            <p><span class="label">Coach:</span> ${p.onward.coach}</p>
-            <p><span class="label">Seat:</span> ${p.onward.seat}</p>
+            <div class="row">
+              <p><span class="label">Date:</span> ${p.onward.date}</p>
+              <p><span class="label">Time:</span> ${p.onward.time}</p>
+            </div>
+            <div class="row">
+              <p><span class="label">Coach:</span> ${p.onward.coach}</p>
+              <p><span class="label">Seat:</span> ${p.onward.seat}</p>
+            </div>
           </div>
 
           <!-- Middle / QR -->
@@ -246,25 +250,24 @@
 
           <!-- Return -->
           <div class="ticket-part">
-            <div class="train-title">${p.return.train}</div>
+            <p><span class="label">Train:</span> ${p.return.train}</p>
             <div class="route">
               <div class="station-name">${p.return.from}</div>
-              <div class="track-wrap">
-                <svg class="track-svg" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="0" y1="30" x2="300" y2="30" stroke="black" stroke-width="3"/>
-                  <line x1="0" y1="50" x2="300" y2="50" stroke="black" stroke-width="3"/>
-                  <line x1="0" y1="40" x2="300" y2="40" stroke="black" stroke-width="1" stroke-dasharray="8,6"/>
-                  <rect x="120" y="10" width="70" height="35" rx="4" fill="#d63384" stroke="black"/>
-                  <circle cx="135" cy="50" r="6" fill="black"/>
-                  <circle cx="175" cy="50" r="6" fill="black"/>
-                </svg>
-              </div>
+              <svg class="train-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40">
+                <rect x="5" y="10" width="60" height="20" rx="4" fill="#d63384" stroke="black"/>
+                <circle cx="20" cy="32" r="4" fill="black"/>
+                <circle cx="50" cy="32" r="4" fill="black"/>
+              </svg>
               <div class="station-name">${p.return.to}</div>
             </div>
-            <p><span class="label">Date:</span> ${p.return.date}</p>
-            <p><span class="label">Time:</span> ${p.return.time}</p>
-            <p><span class="label">Coach:</span> ${p.return.coach}</p>
-            <p><span class="label">Seat:</span> ${p.return.seat}</p>
+            <div class="row">
+              <p><span class="label">Date:</span> ${p.return.date}</p>
+              <p><span class="label">Time:</span> ${p.return.time}</p>
+            </div>
+            <div class="row">
+              <p><span class="label">Coach:</span> ${p.return.coach}</p>
+              <p><span class="label">Seat:</span> ${p.return.seat}</p>
+            </div>
           </div>
         </div>
       `;
@@ -288,4 +291,3 @@
   </script>
 </body>
 </html>
-
