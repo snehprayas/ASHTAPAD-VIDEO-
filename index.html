@@ -76,6 +76,7 @@
       cursor: pointer;
     }
 
+    /* Ticket */
     .ticket {
       display: flex;
       position: relative;
@@ -137,11 +138,7 @@
       position: absolute;
       left: 0; right: 0; bottom: 0;
       height: 14px;
-      background: repeating-linear-gradient(
-        -45deg,
-        var(--accent) 0 12px,
-        transparent 12px 24px
-      );
+      background: repeating-linear-gradient(-45deg, var(--accent) 0 12px, transparent 12px 24px);
       z-index: 1;
     }
 
@@ -160,45 +157,29 @@
       z-index: 0;
     }
 
-    .route {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin: 12px 0;
-    }
-
-    .station-name {
-      flex: 1;
-      text-align: center;
-      font-size: 22px;
-      font-weight: 700;
-      color: black;
-    }
-
-    .train-img {
-      width: 70px;
-      height: auto;
-      flex-shrink: 0;
-    }
+    .route { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0; }
+    .station-name { flex: 1; text-align: center; font-size: 22px; font-weight: 700; color: black; }
+    .train-img { width: 70px; height: auto; flex-shrink: 0; }
 
     .info-block { margin: 6px 0; }
     .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
     .info-value { font-size: 14px; font-weight: 700; }
-
     .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
     .row .info-block { flex: 1; }
 
+    /* Barcode container rotated for visual effect */
     .barcode-container {
       width: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
+      transform: rotate(-90deg); /* visual rotation */
     }
 
-    #barcodeCanvas { 
-      width: 50px;
-      height: 140px;
+    /* Barcode canvas stays horizontal for scanning */
+    #barcodeCanvas {
+      width: 140px;
+      height: 40px;
     }
 
     .passenger-info {
@@ -298,29 +279,14 @@
         </div>
       `;
 
-      // TRUE vertical barcode generation
-      const canvas = document.getElementById("barcodeCanvas");
-      const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = 140;
-      tempCanvas.height = 50;
-
-      JsBarcode(tempCanvas, bookingId, {
+      // Generate horizontal barcode (scannable)
+      JsBarcode("#barcodeCanvas", bookingId, {
         format: "CODE128",
         displayValue: false,
-        height: 50,
+        height: 40,
         width: 2,
         margin: 0
       });
-
-      // Rotate the barcode pixels onto the visible canvas
-      const ctx = canvas.getContext("2d");
-      canvas.width = 50;
-      canvas.height = 140;
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.drawImage(tempCanvas, -tempCanvas.width/2, -tempCanvas.height/2);
-      ctx.restore();
 
       document.getElementById("downloadBtn").style.display = "block";
     }
