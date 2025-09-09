@@ -218,76 +218,84 @@
 
   <script>
     function generateTicket() {
-      const bookingId = document.getElementById('bookingId').value.trim();
-      const p = passengers[bookingId];
-const barcodeData = `ID:${bookingId}|Name:${p.name}|Phone:${p.phone}`;
-generateBarcode("barcodeCanvas", barcodeData);
+  const bookingId = document.getElementById('bookingId').value.trim();
+  const p = passengers[bookingId];
 
-      if (!p) { alert("No booking found for this ID!"); return; }
+  if (!p) { 
+    alert("No booking found for this ID!"); 
+    return; 
+  }
 
-      document.getElementById("ticketContainer").innerHTML = `
-        <div class="ticket" id="ticket">
-          <div class="ticket-header-global">
-            <div class="ticket-header-part">SNEH PRAYAS</div>
-            <div class="ticket-header-part">RETURN PASS</div>
-            <div class="ticket-header-part">ONWARD PASS</div>
-          </div>
+  // Insert ticket with a fresh <canvas>
+  document.getElementById("ticketContainer").innerHTML = `
+    <div class="ticket" id="ticket">
+      <div class="ticket-header-global">
+        <div class="ticket-header-part">SNEH PRAYAS</div>
+        <div class="ticket-header-part">RETURN PASS</div>
+        <div class="ticket-header-part">ONWARD PASS</div>
+      </div>
 
-          <div class="ticket-part small">
-            <div class="barcode-container">
-              <canvas id="barcodeCanvas"></canvas>
-            </div>
-            <div class="passenger-info">
-              <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
-              <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
-              <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
-              <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
-            </div>
-          </div>
-
-          <div class="ticket-part">
-            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return.train}</span></div>
-            <div class="route">
-              <div class="station-name">${p.return.from}</div>
-              <img src="train-right.png" class="train-img" alt="Train">
-              <div class="station-name">${p.return.to}</div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.return.date}</span></div>
-              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.return.time}</span></div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.return.coach}</span></div>
-              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.return.seat}</span></div>
-            </div>
-          </div>
-
-          <div class="ticket-part">
-            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward.train}</span></div>
-            <div class="route">
-              <div class="station-name">${p.onward.from}</div>
-              <img src="train-right.png" class="train-img" alt="Train">
-              <div class="station-name">${p.onward.to}</div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.onward.date}</span></div>
-              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.onward.time}</span></div>
-            </div>
-            <div class="row">
-              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.onward.coach}</span></div>
-              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.onward.seat}</span></div>
-            </div>
-          </div>
+      <div class="ticket-part small">
+        <div class="barcode-container">
+          <canvas id="barcodeCanvas"></canvas>
         </div>
-      `;
+        <div class="passenger-info">
+          <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
+          <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
+          <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
+          <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
+        </div>
+      </div>
 
-    function generateBarcode(canvasId, data) {
-  // Create an offscreen canvas for horizontal barcode
+      <div class="ticket-part">
+        <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return.train}</span></div>
+        <div class="route">
+          <div class="station-name">${p.return.from}</div>
+          <img src="train-right.png" class="train-img" alt="Train">
+          <div class="station-name">${p.return.to}</div>
+        </div>
+        <div class="row">
+          <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.return.date}</span></div>
+          <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.return.time}</span></div>
+        </div>
+        <div class="row">
+          <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.return.coach}</span></div>
+          <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.return.seat}</span></div>
+        </div>
+      </div>
+
+      <div class="ticket-part">
+        <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward.train}</span></div>
+        <div class="route">
+          <div class="station-name">${p.onward.from}</div>
+          <img src="train-right.png" class="train-img" alt="Train">
+          <div class="station-name">${p.onward.to}</div>
+        </div>
+        <div class="row">
+          <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.onward.date}</span></div>
+          <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.onward.time}</span></div>
+        </div>
+        <div class="row">
+          <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.onward.coach}</span></div>
+          <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.onward.seat}</span></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Now draw the barcode on the fresh canvas
+  const barcodeData = `ID:${bookingId}|Name:${p.name}|Phone:${p.phone}`;
+  generateBarcode("barcodeCanvas", barcodeData);
+
+  document.getElementById("downloadBtn").style.display = "block";
+}
+
+function generateBarcode(canvasId, data) {
   const tempCanvas = document.createElement("canvas");
   JsBarcode(tempCanvas, data, {
     format: "CODE128",
     displayValue: false,
-    height: 60,   // make it taller for better scanning
+    height: 60,
     width: 2,
     margin: 2
   });
@@ -295,7 +303,7 @@ generateBarcode("barcodeCanvas", barcodeData);
   const finalCanvas = document.getElementById(canvasId);
   const ctx = finalCanvas.getContext("2d");
 
-  // Resize canvas to rotated dimensions
+  // Resize final canvas
   finalCanvas.width = tempCanvas.height;
   finalCanvas.height = tempCanvas.width;
 
