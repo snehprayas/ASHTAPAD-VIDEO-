@@ -220,6 +220,8 @@
     function generateTicket() {
       const bookingId = document.getElementById('bookingId').value.trim();
       const p = passengers[bookingId];
+const barcodeData = `ID:${bookingId}|Name:${p.name}|Phone:${p.phone}`;
+generateBarcode("barcodeCanvas", barcodeData);
 
       if (!p) { alert("No booking found for this ID!"); return; }
 
@@ -279,17 +281,32 @@
         </div>
       `;
 
-      // Build compact passenger string for barcode
-const barcodeData = `ID:${bookingId}|Name:${p.name}|Phone:${p.phone}`;
+    function generateBarcode(canvasId, data) {
+  // Create an offscreen canvas for horizontal barcode
+  const tempCanvas = document.createElement("canvas");
+  JsBarcode(tempCanvas, data, {
+    format: "CODE128",
+    displayValue: false,
+    height: 60,   // make it taller for better scanning
+    width: 2,
+    margin: 2
+  });
 
-// Generate barcode with ID + Name + Phone
-JsBarcode("#barcodeCanvas", barcodeData, {
-  format: "CODE128",
-  displayValue: false, // set true if you want text under the barcode
-  height: 40,
-  width: 2,
-  margin: 0
-});
+  const finalCanvas = document.getElementById(canvasId);
+  const ctx = finalCanvas.getContext("2d");
+
+  // Resize canvas to rotated dimensions
+  finalCanvas.width = tempCanvas.height;
+  finalCanvas.height = tempCanvas.width;
+
+  // Rotate and draw
+  ctx.save();
+  ctx.translate(finalCanvas.width / 2, finalCanvas.height / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.drawImage(tempCanvas, -tempCanvas.width / 2, -tempCanvas.height / 2);
+  ctx.restore();
+}
+
 
 
       document.getElementById("downloadBtn").style.display = "block";
