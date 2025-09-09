@@ -1,6 +1,4 @@
 const passengers = {
-  
-  {
   "AST001B03R038": {
     "name": "Anita Jain",
     "phone": "9830949980",
@@ -2301,5 +2299,4 @@ const passengers = {
       "seat": "6"
     }
   }
-}
 };
