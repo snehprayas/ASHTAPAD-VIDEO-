@@ -253,16 +253,11 @@
     <div id="ticketContainer"></div>
     <button id="downloadBtn" class="button" onclick="downloadTicket()">Download Ticket</button>
   </div>
-
   
-<script src="passengers.js"></script>
-
-
-  };
-
-
-    
-
+ <!-- Load passenger dataset -->
+  <script src="passengers.js"></script>
+<!-- Ticket generator -->
+  <script>
     function generateTicket() {
       const bookingId = document.getElementById('bookingId').value.trim();
       const p = passengers[bookingId];
