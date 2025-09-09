@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     :root {
-      --pink-100: #ffe6f0;
+      --pink-100: #ffe6f0; /* slightly darker pink */
       --accent: #d63384;
       --accent-2: #ff6699;
       --perforation: #eaa1c3;
@@ -107,9 +107,16 @@
       justify-content: center;
     }
 
-    .ticket-header-part:first-child { flex: 0 0 25%; }
+    /* First (SNEH PRAYAS) smaller */
+    .ticket-header-part:first-child {
+      flex: 0 0 25%;
+    }
+
+    /* Second & third equal */
     .ticket-header-part:nth-child(2),
-    .ticket-header-part:nth-child(3) { flex: 0 0 37.5%; }
+    .ticket-header-part:nth-child(3) {
+      flex: 0 0 37.5%;
+    }
 
     .ticket-part {
       flex: 1;
@@ -131,17 +138,25 @@
       padding-left: 12px;
     }
 
-    .ticket-part:not(:last-child) { border-right: 2px dashed var(--perforation); }
+    .ticket-part:not(:last-child) {
+      border-right: 2px dashed var(--perforation);
+    }
 
+    /* Restore pink striped bottom border */
     .ticket::after {
       content: "";
       position: absolute;
       left: 0; right: 0; bottom: 0;
       height: 14px;
-      background: repeating-linear-gradient(-45deg, var(--accent) 0 12px, transparent 12px 24px);
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--accent) 0 12px,
+        transparent 12px 24px
+      );
       z-index: 1;
     }
 
+    /* Watermark for each ticket part */
     .ticket-part::before {
       content: "";
       position: absolute;
@@ -157,29 +172,49 @@
       z-index: 0;
     }
 
-    .route { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0; }
-    .station-name { flex: 1; text-align: center; font-size: 22px; font-weight: 700; color: black; }
-    .train-img { width: 70px; height: auto; flex-shrink: 0; }
-
-    .info-block { margin: 6px 0; }
-    .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
-    .info-value { font-size: 14px; font-weight: 700; }
-    .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
-    .row .info-block { flex: 1; }
-
-    /* Barcode container rotated for visual effect */
-    .barcode-container {
-      width: 60px;
+    .route {
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: rotate(-90deg); /* visual rotation */
+      gap: 12px;
+      margin: 12px 0;
     }
 
-    /* Barcode canvas stays horizontal for scanning */
+    .station-name {
+      flex: 1;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: black;
+    }
+
+    .train-img {
+      width: 70px;
+      height: auto;
+      flex-shrink: 0;
+    }
+
+    .info-block {
+      margin: 6px 0;
+    }
+    .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
+    .info-value { font-size: 14px; font-weight: 700; }
+
+    .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
+    .row .info-block { flex: 1; }
+
+    /* Barcode */
+    .barcode-container {
+      width: 60px; /* reserve space for rotated barcode */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     #barcodeCanvas {
-      width: 140px;
-      height: 40px;
+      transform: rotate(-90deg);
+      width: 140px;   /* length of barcode after rotation */
+      height: 50px;   /* thickness */
     }
 
     .passenger-info {
@@ -189,8 +224,14 @@
       text-align: left;
       font-size: 13px;
     }
-    .passenger-info .info-label { font-size: 11px; color: #444; }
-    .passenger-info .info-value { font-size: 13px; font-weight: 700; }
+    .passenger-info .info-label {
+      font-size: 11px;
+      color: #444;
+    }
+    .passenger-info .info-value {
+      font-size: 13px;
+      font-weight: 700;
+    }
 
     #downloadBtn { display: none; margin: 15px auto; }
   </style>
@@ -213,108 +254,84 @@
     <button id="downloadBtn" class="button" onclick="downloadTicket()">Download Ticket</button>
   </div>
   
-  <!-- Load passenger dataset -->
+ <!-- Load passenger dataset -->
   <script src="passengers.js"></script>
-
+<!-- Ticket generator -->
   <script>
     function generateTicket() {
-  const bookingId = document.getElementById('bookingId').value.trim();
-  const p = passengers[bookingId];
+      const bookingId = document.getElementById('bookingId').value.trim();
+      const p = passengers[bookingId];
 
-  if (!p) { 
-    alert("No booking found for this ID!"); 
-    return; 
-  }
+      if (!p) { alert("No booking found for this ID!"); return; }
 
-  // Insert ticket with a fresh <canvas>
-  document.getElementById("ticketContainer").innerHTML = `
-    <div class="ticket" id="ticket">
-      <div class="ticket-header-global">
-        <div class="ticket-header-part">SNEH PRAYAS</div>
-        <div class="ticket-header-part">RETURN PASS</div>
-        <div class="ticket-header-part">ONWARD PASS</div>
-      </div>
+      document.getElementById("ticketContainer").innerHTML = `
+        <div class="ticket" id="ticket">
+          <div class="ticket-header-global">
+            <div class="ticket-header-part">SNEH PRAYAS</div>
+            <div class="ticket-header-part">RETURN PASS</div>
+            <div class="ticket-header-part">ONWARD PASS</div>
+          </div>
 
-      <div class="ticket-part small">
-        <div class="barcode-container">
-          <canvas id="barcodeCanvas"></canvas>
+          <!-- Left: Barcode + Passenger Info Beside -->
+          <div class="ticket-part small">
+            <div class="barcode-container">
+              <canvas id="barcodeCanvas"></canvas>
+            </div>
+            <div class="passenger-info">
+              <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
+              <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
+              <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
+              <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
+            </div>
+          </div>
+
+          <!-- Middle: Return -->
+          <div class="ticket-part">
+            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return.train}</span></div>
+            <div class="route">
+              <div class="station-name">${p.return.from}</div>
+              <img src="train-right.png" class="train-img" alt="Train">
+              <div class="station-name">${p.return.to}</div>
+            </div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.return.date}</span></div>
+              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.return.time}</span></div>
+            </div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.return.coach}</span></div>
+              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.return.seat}</span></div>
+            </div>
+          </div>
+
+          <!-- Right: Onward -->
+          <div class="ticket-part">
+            <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward.train}</span></div>
+            <div class="route">
+              <div class="station-name">${p.onward.from}</div>
+              <img src="train-right.png" class="train-img" alt="Train">
+              <div class="station-name">${p.onward.to}</div>
+            </div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.onward.date}</span></div>
+              <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.onward.time}</span></div>
+            </div>
+            <div class="row">
+              <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.onward.coach}</span></div>
+              <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.onward.seat}</span></div>
+            </div>
+          </div>
         </div>
-        <div class="passenger-info">
-          <div class="info-block"><span class="info-label">Booking ID</span><span class="info-value">${bookingId}</span></div>
-          <div class="info-block"><span class="info-label">Name</span><span class="info-value">${p.name}</span></div>
-          <div class="info-block"><span class="info-label">Phone</span><span class="info-value">${p.phone}</span></div>
-          <div class="info-block"><span class="info-label">Gender</span><span class="info-value">${p.gender}</span></div>
-        </div>
-      </div>
+      `;
 
-      <div class="ticket-part">
-        <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.return.train}</span></div>
-        <div class="route">
-          <div class="station-name">${p.return.from}</div>
-          <img src="train-right.png" class="train-img" alt="Train">
-          <div class="station-name">${p.return.to}</div>
-        </div>
-        <div class="row">
-          <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.return.date}</span></div>
-          <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.return.time}</span></div>
-        </div>
-        <div class="row">
-          <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.return.coach}</span></div>
-          <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.return.seat}</span></div>
-        </div>
-      </div>
-
-      <div class="ticket-part">
-        <div class="info-block"><span class="info-label">Train</span><span class="info-value">${p.onward.train}</span></div>
-        <div class="route">
-          <div class="station-name">${p.onward.from}</div>
-          <img src="train-right.png" class="train-img" alt="Train">
-          <div class="station-name">${p.onward.to}</div>
-        </div>
-        <div class="row">
-          <div class="info-block"><span class="info-label">Date</span><span class="info-value">${p.onward.date}</span></div>
-          <div class="info-block"><span class="info-label">Time</span><span class="info-value">${p.onward.time}</span></div>
-        </div>
-        <div class="row">
-          <div class="info-block"><span class="info-label">Coach</span><span class="info-value">${p.onward.coach}</span></div>
-          <div class="info-block"><span class="info-label">Seat</span><span class="info-value">${p.onward.seat}</span></div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Now draw the barcode on the fresh canvas
-  const barcodeData = `ID:${bookingId}|Name:${p.name}|Phone:${p.phone}`;
-  generateBarcode("barcodeCanvas", barcodeData);
-
- 
-
-function generateBarcode(canvasId, data) {
-  const tempCanvas = document.createElement("canvas");
-  JsBarcode(tempCanvas, data, {
-    format: "CODE128",
-    displayValue: false,
-    height: 60,
-    width: 2,
-    margin: 2
-  });
-
-  const finalCanvas = document.getElementById(canvasId);
-  const ctx = finalCanvas.getContext("2d");
-
-  // Resize final canvas
-  finalCanvas.width = tempCanvas.height;
-  finalCanvas.height = tempCanvas.width;
-
-  // Rotate and draw
-  ctx.save();
-  ctx.translate(finalCanvas.width / 2, finalCanvas.height / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.drawImage(tempCanvas, -tempCanvas.width / 2, -tempCanvas.height / 2);
-  ctx.restore();
-}
-
-
+      // Generate barcode
+      const canvas = document.getElementById("barcodeCanvas");
+      JsBarcode(canvas, bookingId, {
+        format: "CODE128",
+        displayValue: false,
+        height: 40,
+        width: 1.5,
+        margin: 0
+      });
 
       document.getElementById("downloadBtn").style.display = "block";
     }
