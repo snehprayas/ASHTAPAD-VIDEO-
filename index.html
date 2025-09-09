@@ -279,14 +279,18 @@
         </div>
       `;
 
-      // Generate horizontal barcode (scannable)
-      JsBarcode("#barcodeCanvas", bookingId, {
-        format: "CODE128",
-        displayValue: false,
-        height: 40,
-        width: 2,
-        margin: 0
-      });
+      // Build compact passenger string for barcode
+const barcodeData = `ID:${bookingId}|Name:${p.name}|Phone:${p.phone}`;
+
+// Generate barcode with ID + Name + Phone
+JsBarcode("#barcodeCanvas", barcodeData, {
+  format: "CODE128",
+  displayValue: false, // set true if you want text under the barcode
+  height: 40,
+  width: 2,
+  margin: 0
+});
+
 
       document.getElementById("downloadBtn").style.display = "block";
     }
