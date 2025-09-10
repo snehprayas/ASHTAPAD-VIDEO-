@@ -1,7 +1,8 @@
-H<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sneh Prayas Boarding Pass</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -23,108 +24,134 @@ H<!DOCTYPE html>
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      padding: 24px;
+      padding: 16px;
       color: var(--text);
     }
 
     .container {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
     h1.main-title {
       text-align: center;
       color: var(--accent);
-      font-size: 32px;
+      font-size: clamp(20px, 5vw, 32px);
       font-weight: 700;
       margin: 8px 0 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .logo-inline { height: 60px; width: auto; }
+    .logo-inline { height: 50px; width: auto; }
 
     .gateway {
       background: #ffffff;
-      border-radius: 14px;
-      padding: 18px 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
       text-align: center;
     }
 
-    .form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .form { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 
     .gateway input {
-      padding: 10px 12px;
+      padding: 10px;
       border: 2px solid #f7c7da;
       border-radius: 10px;
       font-size: 14px;
-      width: 230px;
+      width: min(90%, 250px);
       outline: none;
     }
 
     .button {
-      padding: 10px 18px;
-      border-radius: 12px;
+      padding: 10px 16px;
+      border-radius: 10px;
       background: linear-gradient(135deg, var(--accent-2), var(--accent));
       color: #fff;
       font-weight: 700;
       border: none;
       cursor: pointer;
+      font-size: 14px;
     }
 
     /* Ticket */
     .ticket {
       display: flex;
+      flex-wrap: wrap;
       position: relative;
-      width: 80%;
+      width: 100%;
       max-width: 880px;
-      margin: 22px auto;
+      margin: 20px auto;
       background: var(--pink-100);
-      border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
       overflow: hidden;
     }
 
     .ticket-header-global {
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 42px;
+      height: 40px;
       background: var(--accent);
       display: flex;
+      justify-content: space-around;
+      align-items: center;
       font-weight: 700;
-      font-size: 16px;
+      font-size: clamp(12px, 2.5vw, 16px);
       color: #fff;
       z-index: 1;
     }
 
-    .ticket-header-part { display: flex; align-items: center; justify-content: center; }
-    .ticket-header-part:first-child { flex: 0 0 25%; }
-    .ticket-header-part:nth-child(2),
-    .ticket-header-part:nth-child(3) { flex: 0 0 37.5%; }
-
     .ticket-part {
       flex: 1;
-      padding: 58px 18px 18px;
-      font-size: 14px;
+      padding: 55px 12px 16px;
+      font-size: clamp(12px, 2.5vw, 14px);
       position: relative;
-      overflow: hidden;
-      color: black;
       text-align: center;
       z-index: 1;
+      min-width: 250px;
     }
 
+    /* ✅ Fixed QR section */
     .ticket-part.small { 
-      flex: 0.7; 
+      flex: 0 0 220px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       justify-content: flex-start;
-      padding-left: 12px;
+      padding: 55px 12px 16px;
+      text-align: left;
     }
+
+    .qr-container {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+    }
+
+    .passenger-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .passenger-info .info-label { font-size: 11px; color: #444; }
+    .passenger-info .info-value { font-size: 13px; font-weight: 700; }
 
     .ticket-part:not(:last-child) {
       border-right: 2px dashed var(--perforation);
@@ -134,60 +161,41 @@ H<!DOCTYPE html>
       content: "";
       position: absolute;
       left: 0; right: 0; bottom: 0;
-      height: 14px;
+      height: 12px;
       background: repeating-linear-gradient(-45deg, var(--accent) 0 12px, transparent 12px 24px);
       z-index: 1;
     }
 
-    .ticket-part::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 60%;
-      height: 60%;
-      background: url('SNEH_PRAYAS_LOGO.png') no-repeat center;
-      background-size: contain;
-      opacity: 0.08;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 0;
+    .route { 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px; 
+      margin: 10px 0; 
+      flex-wrap: wrap;
     }
 
-    .route { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0; }
-    .station-name { flex: 1; text-align: center; font-size: 22px; font-weight: 700; color: black; }
-    .train-img { width: 70px; height: auto; flex-shrink: 0; }
-
-    .info-block { margin: 6px 0; }
-    .info-label { font-size: 12px; font-weight: 600; color: #555; display: block; }
-    .info-value { font-size: 14px; font-weight: 700; }
-
-    .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
-    .row .info-block { flex: 1; }
-
-    /* QR container */
-    .qr-container {
-      width: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .station-name { 
+      flex: 1; 
+      text-align: center; 
+      font-size: clamp(14px, 4vw, 20px); 
+      font-weight: 700; 
     }
 
-    .qr-img {
-      width: 90px;
-      height: 90px;
-      object-fit: contain;
-    }
+    .train-img { width: 50px; max-width: 15vw; height: auto; }
 
-    .passenger-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      text-align: left;
-      font-size: 13px;
+    .info-block { margin: 4px 0; }
+    .info-label { font-size: clamp(10px, 2vw, 12px); font-weight: 600; color: #555; display: block; }
+    .info-value { font-size: clamp(12px, 3vw, 14px); font-weight: 700; }
+
+    .row { display: flex; justify-content: space-between; margin-top: 6px; gap: 10px; flex-wrap: wrap; }
+    .row .info-block { flex: 1; min-width: 100px; }
+
+    @media (max-width: 600px) {
+      .ticket { flex-direction: column; }
+      .ticket-part { border-right: none; border-bottom: 2px dashed var(--perforation); }
+      .ticket-part.small { flex-direction: column; align-items: flex-start; }
     }
-    .passenger-info .info-label { font-size: 11px; color: #444; }
-    .passenger-info .info-value { font-size: 13px; font-weight: 700; }
 
     #downloadBtn, #downloadAllBtn { display: none; margin: 15px auto; }
   </style>
@@ -210,9 +218,10 @@ H<!DOCTYPE html>
     <button id="downloadBtn" class="button" onclick="downloadTicket()">Download Ticket</button>
     <button id="downloadAllBtn" class="button" onclick="downloadAllTickets()">Download All 100 Passes</button>
   </div>
-  
+
+  <!-- ✅ Keep your JS below (unchanged except CSS fixes above) -->
   <script src="passengers.js"></script>
-  <script>
+ <script>
     const qrMap = { "AST001B03R038": "ALI363", "AST002B03R038": "ALI364", "AST003B03R038": "ALI365", "AST004B03R037": "ALI368", "AST005B08R078": "ALI369", "AST006B08R078": "ALI370", "AST007B08R078": "ALI371", "AST008B13R051": "BBK341", "AST009B13R053": "BBK342", "AST010B08R080": "BBK343", "AST011B08R081": "BBK344", "AST012B12R066": "BBK345", "AST013B05R114": "BBK346", "AST014B05R111": "BBK347", "AST015B12R066": "BBK348", "AST016B17R026": "BBK349", "AST017B08R080": "BBK350", "AST018B08R081": "BBK351", "AST019B10R094": "BBK352", "AST020B12R070": "BBK353", "AST021B12R067": "BBK354", "AST022B12R067": "BBK355", "AST023B10R093": "BBK356", "AST024B12R067": "BBK357", "AST025B12R068": "BBK358", "AST026B12R068": "BBK359", "AST027B03R024": "BBK360", "AST028B03R041": "BBK361", "AST029B12R070": "BBK362", "AST030B02R015": "BBZ316", "AST031B11R082": "BBZ317", "AST032B12R069": "BBZ318", "AST033B12R069": "BBZ319", "AST034B13R053": "BBZ320", "AST035B10R093": "BBZ321", "AST036B04R024": "BBZ322", "AST037B15R125": "BBZ323", "AST038B09R098": "BBZ324", "AST039B09R098": "BBZ325", "AST040B01R003": "BBZ326", "AST041B09R098": "BBZ327", "AST042B12R071": "BBZ328", "AST043B11R083": "BBZ330", "AST044B11R083": "BBZ331", "AST045B11R083": "BBZ332", "AST046B11R089": "BBZ333", "AST047B01R004": "BBZ334", "AST048B12R072": "BBZ335", "AST049B12R069": "BBZ336", "AST050B04R017": "BBZ339", "AST051B01R004": "BBZ340", "AST052B07R135": "CHOW395", "AST053B07R136": "CHOW396", "AST054B02R014": "CHOW399", "AST055B12R070": "CHOW402", "AST056B01R003": "CHOW403", "AST057B01R001": "CHOW404", "AST058B01R003": "CHOW405", "AST059B01R002": "CHOW406", "AST060B01R002": "CHOW407", "AST061B01R002": "CHOW408", "AST062B05R119": "CHOW409", "AST063B05R120": "CHOW410", "AST064B05R119": "CHOW411", "AST065B05R120": "CHOW412", "AST066B15R125": "IND154", "AST067B15R127": "IND155", "AST068B17R027": "IND156", "AST069B17R027": "IND157", "AST070B17R027": "IND158", "AST071B12R072": "IND159", "AST072B12R072": "IND160", "AST073B11R082": "IND161", "AST074B12R073": "IND162", "AST075B06R108": "IND163", "AST084B04R019": "IND172", "AST085B04R022": "IND173", "AST086B12R071": "IND174", "AST087B11R082": "IND175", "AST096B08R077": "IND185", "AST097B08R077": "IND186", "AST098B08R077": "IND187", "AST101B14R060": "IND190", "AST102B14R060": "IND191", "AST103B14R060": "IND192", "AST104B06R110": "IND193", "AST105B06R111": "IND194", "AST106B02R009": "IND195", "AST107B12R073": "IND196", "AST108B01R006": "KAN372", "AST109B01R007": "KAN373", "AST110B11R085": "KAN374", "AST111B11R086": "KAN375", "AST112B04R019": "KAN376", "AST113B04R024": "KAN377", "AST114B04R021": "KAN378", "AST115B06R114": "KAN379", "AST116B06R113": "KAN380", "AST118B06R110": "KAN384", "AST119B06R113": "KAN385" };
 
     function generateTicket() {
